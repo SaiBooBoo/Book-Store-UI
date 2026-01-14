@@ -1,0 +1,36 @@
+<nz-table
+    [nzLoading]="isLoading"
+    [nzData]="authors"
+    [nzBordered]="true">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Bio</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody> chat
+        <tr *ngFor="let author of authors">
+            <td>{{ author.id }}</td>
+            <td>{{ author.firstName }}</td>
+            <td>{{ author.lastName }}</td>
+            <td>{{ author.email }}</td>
+            <td class="truncate-text">{{ author.bio }}</td>
+            <td> 
+                <button (click)="deleteAuthor(author.id)" nzType="default" nzDanger><nz-icon nzType="delete" nzTheme="outline" />Delete</button>
+                <button nz-button nzType="default"><nz-icon nzType="edit" nzTheme="outline" />Update</button>
+            </td>
+        </tr>
+    </tbody>
+
+</nz-table>
+<nz-pagination 
+  class="mt-3"
+  [nzPageIndex]="pageIndex"
+  [nzPageSize]="pageSize"
+  [nzTotal]="totalElements"
+  (nzPageIndexChange)="onPageChange($event)">

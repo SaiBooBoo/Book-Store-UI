@@ -1,0 +1,10 @@
+.truncate-text {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+::ng-deep .ant-table table {
+    table-layout: fixed;
+}
