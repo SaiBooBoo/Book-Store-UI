@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { BookListComponent } from './books/features/book-list/book-list.component';
-import { AuthorListComponent } from './authors/features/author-list/author-list.component';
-import { AuthorCreateComponent } from './authors/features/author-create/author-create.component';
-import { BookCreateComponent } from './books/features/book-create/book-create.component';
+import { BookListComponent } from './books/components/book-list/book-list.component';
+import { AuthorListComponent } from './authors/components/author-list/author-list.component';
+import { AuthorCreateComponent } from './authors/components/author-create/author-create.component';
+import { BookCreateComponent } from './books/components/book-create/book-create.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'admin/books', pathMatch: 'full'},

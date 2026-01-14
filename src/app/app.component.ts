@@ -4,7 +4,7 @@ import { Router, RouterModule } from "@angular/router";
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { AuthorCreateComponent } from "./authors/features/author-create/author-create.component";
+import { AuthorCreateComponent } from "./authors/components/author-create/author-create.component";
 
 @Component({
     selector: 'app-root',

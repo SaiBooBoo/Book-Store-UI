@@ -5,16 +5,25 @@ import { Injectable } from "@angular/core";
 @Injectable({ providedIn: 'root'})
 export class AuthService {
 
-    private readonly API = 'http://localhost:8080/api/auth/login';
+    private readonly LOGIN_URL  = 'http://localhost:8080/api/auth/login';
 
     constructor(private http: HttpClient) {}
 
-    login(credentials: {username: string, password: string}) {
-        return this.http.post<any>(this.API, credentials).pipe(
-            tap(user => {
-                localStorage.setItem('user', JSON.stringify(user));
-            })
-        );
+    login({username: string, password: string}) {
+        const body = new URLSearchParams();
+        body.set('username', username);
+        body.set('password',password);
+
+        return this.http.post(
+            this.LOGIN_URL,
+            body.toString(), 
+            {
+                headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+            withCredentials: true;
+            }
+        )
     }
 
     logout(): void {
@@ -22,12 +31,14 @@ export class AuthService {
     }
 
     isAuthenticated(): boolean {
-        return !!localStorage.getItem('user');
+        return document.cookie.includes('JSESSIONID')
+
     }
 
     getUser(): any {
         return JSON.parse(localStorage.getItem('user')!);
     }
+    
     
 
 }
