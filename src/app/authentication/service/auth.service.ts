@@ -9,21 +9,21 @@ export class AuthService {
 
     constructor(private http: HttpClient) {}
 
-    login({username: string, password: string}) {
-        const body = new URLSearchParams();
-        body.set('username', username);
-        body.set('password',password);
+    login(username: string, password: string) {
+    const body = new URLSearchParams();
+    body.set('username', username);
+    body.set('password', password);
 
-        return this.http.post(
-            this.LOGIN_URL,
-            body.toString(), 
-            {
-                headers: {
+    return this.http.post(
+      this.LOGIN_URL,
+      body.toString(),
+      {
+        headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-            withCredentials: true;
-            }
-        )
+        withCredentials: true // IMPORTANT
+      }
+    );
     }
 
     logout(): void {
@@ -39,6 +39,6 @@ export class AuthService {
         return JSON.parse(localStorage.getItem('user')!);
     }
     
-    
+
 
 }
