@@ -14,8 +14,8 @@ import { NzSelectModule } from "ng-zorro-antd/select";
 import { Author } from "../../../authors/models/author.model";
 import { Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
-import { BookService } from "../../../core/services/book.service";
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { BookService } from "../../service/book.service";
 
 
 

@@ -1,0 +1,19 @@
+<nz-page-header
+  nzTitle="Bookstore Admin"
+  nzSubtitle="Administration Panel">
+</nz-page-header>
+
+    <div>
+        <ul nz-menu nzMode="horizontal">
+            <li nz-menu-item>
+                <a routerLink="/admin/books">Books</a>
+            </li>
+             <li nz-menu-item>
+                <a routerLink="/admin/authors">Authors</a>
+            </li>
+        </ul>
+    </div>
+
+<div class="container mt-3">
+  <router-outlet></router-outlet>
+</div>

@@ -1,7 +1,8 @@
 <nz-table 
   [nzData]="books"
   [nzLoading]="isLoading"
-  [nzBordered]="true">
+  [nzBordered]="true"
+  >
 
   <thead>
     <tr>
@@ -24,9 +25,9 @@
       <td>{{ book.stock }}</td>
       <td>{{ book.authorName }}</td>
       <td>
-        <!-- delete  -->
-         <button (click)="deleteBook(book.id)" nz-button nzType="default" nzDanger ><nz-icon nzType="delete" nzTheme="outline" />Delete</button>
-         <button nz-button nzType="default"><nz-icon nzType="edit" nzTheme="outline" />Update</button>
+         <a ><nz-icon nzType="edit" nzTheme="outline" />Update</a>
+         <nz-divider nzType="vertical"></nz-divider>
+         <a (click)="deleteBook(book.id)" nzDanger ><nz-icon nzType="delete" nzTheme="outline" />Delete</a>
       </td>
     </tr>
 

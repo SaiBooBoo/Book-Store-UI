@@ -1,29 +1,3 @@
-
 <div class="container mt-3">
-    <h2>Welcome to our bookstore! 📚</h2>
-    <nav>
-        <ul nz-menu nzMode="horizontal">
-            <li nz-submenu nzTitle="SLIM SHADY" nzIcon="mail" nzOpen>
-                <ul>
-                    <li nz-menu-group nzTitle="Options"> 
-                        <ul>
-                            <li nz-menu-item> <a class="nav-link" routerLink="/admin/books" routerLinkActive="active">Books</a></li>
-                            <li nz-menu-item> <a class="nav-link" routerLink="/admin/authors" routerLinkActive="active">Authors</a></li>
-                             <!-- <li nz-menu-item> <a class="nav-link" routerLink="/admin/books" routerLinkActive="active">Books</a></li> -->
-                            <li nz-menu-item> <a (click)="goToCreateAuthor()" class="nav-link" routerLink="/admin/author/new" routerLinkActive="active">Create New Author</a></li>       
-                            <li nz-menu-item> <a (click)="goToCreateBook()" class="nav-link" routerLink="/admin/book/new" routerLinkActive="active">Create New Book</a></li> 
-                        </ul>
-                    </li>
-                </ul>   
-            </li>
-        </ul>
-    </nav>
-</div>
-
-
-
-<h3 class="mt-3">“If all printers were determined not to print anything till they were sure it would offend nobody, there would be very little printed.” ― Benjamin Franklin.</h3>
-
-<div class="container mt-3">
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </div>

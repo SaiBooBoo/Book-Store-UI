@@ -1,11 +1,12 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 
 
 @Injectable({ providedIn: 'root'})
 export class AuthService {
 
     private readonly LOGIN_URL  = 'http://localhost:8080/api/auth/login';
+    private readonly _isAuthenticated = signal<boolean>(true);
 
     constructor(private http: HttpClient) {}
 
@@ -37,6 +38,10 @@ export class AuthService {
 
     getUser(): any {
         return JSON.parse(localStorage.getItem('user')!);
+    }
+
+    isLoggedIn(): boolean {
+      return this._isAuthenticated();
     }
     
 

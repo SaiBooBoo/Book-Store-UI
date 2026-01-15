@@ -6,7 +6,6 @@ export interface PageResponse<T> {
         number: number;
         totalElements: number;
         totalPages: number;
-    
     }
    
 }

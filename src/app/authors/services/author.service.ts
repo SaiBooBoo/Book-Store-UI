@@ -1,14 +1,17 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { PageResponse } from "../../shared/components/page.model";
+
+import { PageResponse } from "../../shared/models/page.model";
 import { Author } from "../models/author.model";
 import { Injectable } from "@angular/core";
+import { environment } from "../../environments/environment";
+import { API_ENDPOINTS } from "../../core/constants/api-endpoints";
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthorService {
-    private readonly API_URL = 'http://localhost:8080/api/admin/authors';
+    private readonly API_URL = environment.apiBaseUrl + API_ENDPOINTS.ADMIN.AUTHORS.BASE;
 
     constructor(private http: HttpClient) {}
 
@@ -27,13 +30,12 @@ export class AuthorService {
             return this.http.get<PageResponse<Author>>(this.API_URL, {params});
         }
 
-        private CREATE_URL = "http://localhost:8080/api/admin/new/author"
     createAuthor(payload: any) {
-        return this.http.post(this.CREATE_URL, payload);
+        return this.http.post(environment.apiBaseUrl + API_ENDPOINTS.ADMIN.AUTHORS.CREATE, payload);
     }
     
-        private DELETE_URL = 'http://localhost:8080/api/admin/delete/author';
+       
     deleteAuthor(authorId: number): Observable<void> {
-        return this.http.delete<void>(`${this.DELETE_URL}/${authorId}`);
+        return this.http.delete<void>(environment.apiBaseUrl + API_ENDPOINTS.ADMIN.AUTHORS.DELETE(authorId));
     }
 }

@@ -15,7 +15,7 @@ registerLocaleData(en);
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(RouterModule.forRoot(routes)),
-    importProvidersFrom(HttpClientModule), provideNzI18n(en_US),
+    provideNzI18n(en_US),
     importProvidersFrom(HttpClientModule, ReactiveFormsModule)
   ]
 })

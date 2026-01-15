@@ -1,0 +1,33 @@
+.truncate-text {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+::ng-deep .ant-table table {
+    table-layout: fixed;
+}
+
+.center-container-grid {
+    display: flex;
+    justify-content: center; /* Horizontal centering */
+    align-items: center;     /* Vertical centering */
+    min-height: 10px;       /* Give it height so 'center' has space to work */
+    width: 100%;
+}
+
+.content-to-center {
+    padding: 10px;
+    background-color: lightblue;
+    display: flex;           /* Centers the select and pagination internally */
+    align-items: center;
+    gap: 15px;               /* Adds space between the select and pagination */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Pushes the button to the left */
+    width: 100%;
+    padding: 10px 15px;
+}

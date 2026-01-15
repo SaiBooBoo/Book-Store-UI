@@ -1,7 +1,7 @@
 import { Component, inject } from "@angular/core";
 import { NonNullableFormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { AuthService } from "../service/auth.service";
+import { AuthService } from "../../../core/services/auth.service";
 
 
 export class LoginComponent {

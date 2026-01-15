@@ -1,8 +1,10 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { PageResponse } from "../models/page.model";
 import { Book } from "../../books/model/book.model";
+import { PageResponse } from "../../shared/models/page.model";
+import { environment } from "../../environments/environment";
+import { API_ENDPOINTS } from "../../core/constants/api-endpoints";
 
 
 @Injectable({
@@ -10,7 +12,6 @@ import { Book } from "../../books/model/book.model";
 })
 export class BookService {
 
-    private readonly API_URL = 'http://localhost:8080/api/admin/books';
 
     constructor(private http: HttpClient) {}
 
@@ -27,16 +28,14 @@ export class BookService {
             .set('sortBy', sortBy)
             .set('direction', direction);
         
-        return this.http.get<PageResponse<Book>>(this.API_URL, {params});
+        return this.http.get<PageResponse<Book>>(environment.apiBaseUrl + API_ENDPOINTS.ADMIN.BOOKS.BASE);
     }
 
-    private CREATE_URL = "http://localhost:8080/api/admin/new/book"
     createBook(payload: any) {
-        return this.http.post(this.CREATE_URL, payload);
+        return this.http.post(environment.apiBaseUrl + API_ENDPOINTS.ADMIN.BOOKS.CREATE, payload);
     }
 
-    private DELETE_URL = 'http://localhost:8080/api/admin/delete/book';
     deleteBook(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.DELETE_URL}/${id}`);
+        return this.http.delete<void>(environment.apiBaseUrl + API_ENDPOINTS.ADMIN.BOOKS.DELETE);
     }
 }
