@@ -1,8 +1,8 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="d-flex container justify-content-between align-items-center mb-3">
    
     <div class="button-container">
-         <h3 class="padding: 10">Authors</h3>
-        <button nz-button nzType="primary" (click)="navigateToCreate()">
+         <h3 class="padding: 10px">Authors</h3>
+        <button nz-button nzType="dashed" (click)="navigateToCreate()">
             <nz-icon nzType="plus" />
             Create Author
         </button>
@@ -10,7 +10,7 @@
 
 
     <nz-table [nzLoading]="isLoading" [nzData]="authors" [nzFrontPagination]="false" [nzBordered]="true"
-        nzSize="middle">
+        nzSize="middle">    
         <thead>
             <tr>
                 <th>ID</th>

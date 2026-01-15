@@ -6,11 +6,13 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { Router } from "@angular/router";
+import { FormsModule } from "@angular/forms";
 
 
 import { Book } from "../../model/book.model";
 import { NzIconDirective } from "ng-zorro-antd/icon";
 import { BookService } from "../../service/book.service";
+import { NzSelectModule } from "ng-zorro-antd/select";
 
 
 
@@ -18,7 +20,7 @@ import { BookService } from "../../service/book.service";
     selector: 'app-book-list',
     standalone: true,
     imports: [CommonModule, NzTableModule, NzButtonModule, NzPaginationModule,
-        NzIconDirective, NzIconModule, NzDividerModule],
+        NzIconDirective, NzIconModule, NzDividerModule, NzSelectModule, FormsModule],
     templateUrl: './book-list.component.html',
     styleUrl: 'book.list.component.css'
 })
@@ -31,6 +33,8 @@ export class BookListComponent implements OnInit {
     pageIndex = 1;
 
     isLoading = false;
+
+    readonly pageSizeOptions = [5, 10, 20, 50];
 
     constructor(
         private bookService: BookService,
@@ -92,7 +96,7 @@ export class BookListComponent implements OnInit {
     navigateToCreate(): void {
         this.router.navigate(['/admin/books/new'])
     }
-    
+
     deleteBook(bookId: number): void {
         if (!confirm("Are you sure you want to delete this book?")) {
             return;
