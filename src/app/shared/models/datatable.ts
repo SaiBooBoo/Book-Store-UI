@@ -1,22 +1,20 @@
-export interface DataTableInput<T> {
+export interface DataTableInput<T = any> {
 
   pageIndex: number;
 
   pageSize: number;
 
-  sortField: string | null;
+  sortField?: string | null;
 
-  sortOrder: string | null;
+  sortOrder?: string | null;
 
   queryCriteria?: T;
 
   searchValue?: string | null;
 
+  draw?: number | null;
+
 }
-
-
-
-
 
 export interface DataTableOutput<T> {
 
@@ -28,6 +26,6 @@ export interface DataTableOutput<T> {
 
   data: T[];
 
-  error: string;
+  error?: string;
 
 } 

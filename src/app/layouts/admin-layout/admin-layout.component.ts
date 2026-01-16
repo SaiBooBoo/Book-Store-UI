@@ -4,7 +4,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
 
 @Component({
     standalone: true,
@@ -17,7 +17,8 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
         RouterModule,
         RouterOutlet,
         NzIconModule,
-        NzMenuModule
+        NzMenuModule,
+        NzLayoutModule
     ]
 })
 export class AdminLayoutComponent {}

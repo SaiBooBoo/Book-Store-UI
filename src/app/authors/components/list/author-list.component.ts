@@ -3,15 +3,17 @@ import { Component, OnInit } from "@angular/core";
 import { NzTableModule } from "ng-zorro-antd/table";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzPaginationModule } from "ng-zorro-antd/pagination";
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { FormsModule } from '@angular/forms';
+import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { FormsModule } from "@angular/forms"; 
 
-import { Author } from "../../models/author.model";
+import { Author, AuthorFilter } from "../../models/author.model";
 import { AuthorService } from "../../services/author.service";
 import { Router } from "@angular/router";
 import { NzSelectModule } from "ng-zorro-antd/select";
 import { NzSpaceModule } from "ng-zorro-antd/space";
-import { PageResponse } from "../../../shared/models/page.model";
+import { DataTableInput } from "../../../shared/models/datatable";
 
 
 @Component({
@@ -19,7 +21,7 @@ import { PageResponse } from "../../../shared/models/page.model";
     standalone: true,
     imports: [CommonModule,
        NzTableModule, 
-       NzButtonModule, FormsModule,
+       NzButtonModule, FormsModule, NzDividerModule, NzInputModule,
        NzPaginationModule, NzIconModule, NzSelectModule, NzSpaceModule],
 
     templateUrl: './author-list.component.html',
@@ -27,51 +29,69 @@ import { PageResponse } from "../../../shared/models/page.model";
 })
 export class AuthorListComponent implements OnInit {
 
-  authors: Author[] = [];
+    authors: Author[] = [];
+    totalRecords = 0;
+    loading = false;
+    pageSizeOptions : number[] = [5, 10, 20, 50];  
+    tableInput: DataTableInput = {
+      pageIndex: 1,
+      pageSize: 10,
+      sortField: null,
+      sortOrder: null,
+      searchValue: null
+    }
 
-  totalElements = 0;
-  pageSize = 10;
-  pageIndex = 1;
+      constructor(private authorService: AuthorService, private router: Router) {}
 
-  isLoading = false;
-
-  readonly pageSizeOptions = [5, 10, 20, 50];
-
-  constructor(private authorService: AuthorService, private router: Router) {}
-
-  ngOnInit(): void {
-    this.loadAuthors();
-  }
-// query criteria, 
-  loadAuthors(): void {
-    this.isLoading = true;
-
-    const backendPage = this.pageIndex - 1; 
-
-    this.authorService.getAuthors(backendPage, this.pageSize).subscribe({
-      next: (response: PageResponse<Author>) => {
-        this.authors = response.content;
-        this.pageSize = response.page.size;
-        this.totalElements = response.page.totalElements;
-        this.isLoading = false;
-        
-      },
-      error: (err) => {
-        this.isLoading = false;
+      ngOnInit(): void {
+       this.loadAuthors();
       }
-    });
+
+        loadAuthors(): void {
+    this.loading = true;
+
+    this.authorService.getAuthorsTable(this.tableInput)
+    .subscribe({
+      next: res => {
+        console.log('datatable response', res);
+        this.authors = res.data || [];
+        this.totalRecords = res.recordsFiltered || res.recordsTotal || 0;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    })
   }
 
   onPageChange(pageIndex: number): void {
-    this.pageIndex = pageIndex;
+    this.tableInput.pageIndex = pageIndex;
     this.loadAuthors();
   }
 
   onPageSizeChange(size: number): void {
-    this.pageSize = size;
-    this.pageIndex = 1;
+    this.tableInput.pageSize = size;
+    this.tableInput.pageIndex = 1;
     this.loadAuthors();
   }
+
+    onSearchChange(): void {
+      this.tableInput.pageIndex = 1;
+      this.loadAuthors();
+    }
+
+    onSort(field: string, order: string | null): void {
+    this.tableInput.sortField = field;
+    this.tableInput.sortOrder = order;
+    this.tableInput.pageIndex = 1;
+    this.loadAuthors();
+  }
+
+    onSearch(value: string): void {
+      this.tableInput.searchValue = value;
+      this.tableInput.pageIndex = 1;
+      this.loadAuthors();
+    }
 
   navigateToCreate(): void {
     this.router.navigate(['/admin/authors/new'])
@@ -93,5 +113,9 @@ export class AuthorListComponent implements OnInit {
       }
     })
   }
+
+  getTotalPages(total: number): number {
+  return Math.ceil(total / this.tableInput.pageSize);
+}
 
 }

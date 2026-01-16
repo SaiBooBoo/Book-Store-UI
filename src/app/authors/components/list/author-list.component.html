@@ -1,20 +1,34 @@
 <div class="d-flex container justify-content-between align-items-center mb-3">
-   
+
     <div class="button-container">
-         <h3 class="padding: 10px">Authors</h3>
-        <button nz-button nzType="dashed" (click)="navigateToCreate()">
-            <nz-icon nzType="plus" />
-            Create Author
-        </button>
+        <h3 class="padding: 10px">Authors</h3>
+
+        <nz-space>
+            <div>
+                <nz-input-group [nzPrefix]="prefixIconSearch">
+                    <input type="text" nz-input placeholder="Search authors..." [(ngModel)]="tableInput.searchValue"
+                        (ngModelChange)="onSearchChange()" />
+                </nz-input-group>
+
+                <ng-template #prefixIconSearch>
+                    <nz-icon nzType="search" />
+                </ng-template>
+            </div>
+
+
+            <button nz-button nzType="dashed" (click)="navigateToCreate()">
+                <nz-icon nzType="plus" />
+                Create Author
+            </button>
+        </nz-space>
     </div>
 
 
-    <nz-table [nzLoading]="isLoading" [nzData]="authors" [nzFrontPagination]="false" [nzBordered]="true"
-        nzSize="middle">    
+    <nz-table [nzLoading]="loading" [nzData]="authors" [nzFrontPagination]="false" [nzBordered]="true" nzSize="middle">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>First Name</th>
+                <th nzColumnKey="firstName" nzShowSort (nzSortOrderChange)="onSort('firstName', $event)">First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Bio</th>
@@ -29,16 +43,12 @@
                 <td>{{ author.lastName }}</td>
                 <td>{{ author.email }}</td>
                 <td class="truncate-text">{{ author.bio }}</td>
-                <td>
-                    <nz-space>
-                        <button nz-button nzType="default" nzDanger (click)="deleteAuthor(author.id)">
-                            <nz-icon nzType="delete" />
-                        </button>
 
-                        <button nz-button nzType="default">
-                            <nz-icon nzType="edit" />
-                        </button>
-                    </nz-space>
+                <td>
+                    <a><nz-icon nzType="edit" nzTheme="outline" />Update</a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a (click)="deleteAuthor(author.id)" nzDanger><nz-icon nzType="delete"
+                            nzTheme="outline" />Delete</a>
                 </td>
             </tr>
         </tbody>
@@ -46,17 +56,19 @@
 
     <div class="center-container-grid">
         <div class="content-to-center">
-            <span class="me-2">Row per page:</span>
-            <nz-select [ngModel]="pageSize" (ngModelChange)="onPageSizeChange($event)" style="width: 90px">
-
-                <nz-option *ngFor="let size of pageSizeOptions" [nzValue]="size" [nzLabel]="size">
-                </nz-option>
-            </nz-select>
-
-            <nz-pagination [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalElements"
-                [nzShowSizeChanger]="false" (nzPageIndexChange)="onPageChange($event)">
+            <nz-pagination [nzPageIndex]="tableInput.pageIndex" [nzPageSize]="tableInput.pageSize"
+                [nzTotal]="totalRecords" [nzShowSizeChanger]="true" [nzPageSizeOptions]="[5, 10, 20, 50]"
+                [nzShowTotal]="totalTpl" (nzPageIndexChange)="onPageChange($event)"
+                (nzPageSizeChange)="onPageSizeChange($event)">
             </nz-pagination>
         </div>
+
+        <ng-template #totalTpl let-total let-range="range">
+            Showing {{ range[0] }}–{{ range[1] }}
+            of {{ total }} items ·
+            Page {{ tableInput.pageIndex }}
+            of {{ getTotalPages(total) }}
+        </ng-template>
 
 
     </div>

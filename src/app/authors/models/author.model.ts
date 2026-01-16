@@ -6,3 +6,9 @@ export interface Author {
     dateOfBirth?: string;
     bio?: string;
 }
+
+export interface AuthorFilter {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+}
