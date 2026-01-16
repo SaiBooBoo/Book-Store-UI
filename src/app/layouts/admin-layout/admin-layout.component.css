@@ -5,55 +5,106 @@
 
 :host ::ng-deep .ant-tabs {
   margin-top: 8px;
-}
-
-.admin-header {
+}/* Ensure the outer layout fills the viewport */
+.admin-layout {
+  min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
 }
 
-.header-left {
+/* Make the main layout flexibly occupy remaining space */
+.admin-main-layout {
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
 
+/* Header styling */
+.admin-header {
+  height: 64px;
+  line-height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  background: #001529;
+  color: #fff;
+}
+
+/* Content stretches to fill remaining space */
+.admin-content {
+  flex: 1;
+  padding: 24px;
+  background: #f0f2f5;
+  overflow: auto; /* Important for scrollable content */
+}
+
+/* Footer at the bottom */
+.admin-footer {
+  text-align: center;
+  padding: 12px 24px;
+  background: #f0f2f5;
+}
+
+/* Sider logo */
+.admin-sider .logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+/* Trigger button */
+.trigger {
+  font-size: 20px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;           /* standard header height */
+  padding: 0 24px;        /* spacing on left and right */
+  background-color: #001529; /* dark professional color */
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* subtle shadow */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between logo and title */
+}
+
+.logo-icon {
+  font-size: 24px;
+  color: #fff;
+}
+
 .title {
-  font-size: 25px;
+  font-size: 20px;
   font-weight: 600;
   color: #fff;
-  line-height: 1.2;
 }
 
-.subtitle {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.65);
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* space for multiple buttons if needed */
+}
+.logout-button {
+  border-color: #f5222d;
+  color: #f5222d;
+  font-weight: 600;
 }
 
-/* Base menu item — inactive */
-.header-menu .ant-menu-item {
-  color: rgba(255, 255, 255, 0.45);
+.logout-button:hover {
+  background-color: #f5222d;
+  color: #fff;
 }
-
-/* Remove hover / focus lighting on inactive tabs */
-.header-menu .ant-menu-item:hover,
-.header-menu .ant-menu-item:focus {
-  color: rgba(255, 255, 255, 0.45);
-  background: transparent;
-}
-
-/* Active tab ONLY */
-.header-menu .ant-menu-item-selected {
-  color: #ffffff !important;
-  font-weight: 500;
-  border-bottom: 2px solid #1890ff;
-  background: transparent;
-}
-
-/* Prevent AntD from re-lighting active item on hover */
-.header-menu .ant-menu-item-selected:hover {
-  color: #ffffff;
-  background: transparent;
-}
-

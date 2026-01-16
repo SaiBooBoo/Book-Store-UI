@@ -21,4 +21,6 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
         NzLayoutModule
     ]
 })
-export class AdminLayoutComponent {}
+export class AdminLayoutComponent {
+    collapsed = false;
+}

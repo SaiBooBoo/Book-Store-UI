@@ -7,6 +7,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
+import { ChangeDetectorRef } from "@angular/core";
 
 
 import { Book } from "../../model/book.model";
@@ -38,7 +39,9 @@ export class BookListComponent implements OnInit {
 
     constructor(
         private bookService: BookService,
-        private router : Router) {}
+        private router : Router,
+        private cdr: ChangeDetectorRef
+    ) {}
 
     ngOnInit(): void {
         this.loadBooks();
@@ -71,13 +74,12 @@ export class BookListComponent implements OnInit {
                 this.books = data.content;
                 this.totalElements = data.page.totalElements;
                 this.pageSize = data.page.size;
-                
+                this.isLoading = false;
+                this.cdr.detectChanges();
             },
             error: () => {
-                this.isLoading = false;
-            },
-            complete: () => {
-                this.isLoading = false;
+                this.isLoading = false;   
+                this.cdr.detectChanges();
             }
         });
     }

@@ -1,21 +1,58 @@
-<nz-layout>
-  <nz-header class="admin-header">
-    <div class="header-left">
-      <div class="title"><nz-icon nzType="book" nzTheme="outline" /> Bookstore</div>
-    </div>
+<nz-layout class="admin-layout">
+  <!-- Header -->
+ <nz-header class="admin-header">
+  <div class="header-left">
+    <nz-icon nzType="book" class="logo-icon" />
+    <span class="title">Slim Shady Bookstore</span>
+  </div>
 
-    <ul nz-menu nzMode="horizontal" nzTheme="dark" class="header-menu">
-      <li nz-menu-item routerLink="/admin/books" routerLinkActive="ant-menu-item-selected">
-        Books
-      </li>
-      <li nz-menu-item routerLink="/admin/authors" routerLinkActive="ant-menu-item-selected">
-        Authors
-      </li>
-    </ul>
-  </nz-header>
+  <div class="header-right">
+    <!-- You can add profile menu, logout, etc. here later -->
+    <button nz-button nzGhost class="logout-button">
+  Logout
+</button>
+  </div>
+</nz-header>
+
+  <nz-layout>
+    <!-- Sider -->
+    <nz-sider
+      nzTheme="dark"
+      nzWidth="220"
+      nzCollapsible
+      [(nzCollapsed)]="collapsed">
+
+      <ul nz-menu nzMode="inline" nzTheme="dark">
+        <li
+          nz-menu-item
+          routerLink="/admin/books"
+          routerLinkActive="ant-menu-item-selected"
+          [routerLinkActiveOptions]="{ exact: true }">
+          <nz-icon nzType="book" />
+          <span>Books</span>
+        </li>
+
+        <li
+          nz-menu-item
+          routerLink="/admin/authors"
+          routerLinkActive="ant-menu-item-selected"
+          [routerLinkActiveOptions]="{ exact: true }">
+          <nz-icon nzType="user" />
+          <span>Authors</span>
+        </li>
+      </ul>
+    </nz-sider>
+
+    <!-- Content -->
+    <nz-layout class="content-layout">
+      <nz-content class="admin-content">
+        <router-outlet></router-outlet>
+      </nz-content>
+
+      <!-- Footer -->
+      <nz-footer class="admin-footer">
+        Slim Shady Bookstore © 2026
+      </nz-footer>
+    </nz-layout>
+  </nz-layout>
 </nz-layout>
-
-
-<div class="container mt-3">
-  <router-outlet></router-outlet>
-</div>

@@ -1,27 +1,35 @@
 <div class="d-flex container justify-content-between align-items-center mb-3">
 
-    <div class="button-container">
-        <h3 class="padding: 10px">Authors</h3>
+   <div class="toolbar">
+  <div class="toolbar-left">
+    <h2 class="toolbar-title">Authors</h2>
 
-        <nz-space>
-            <div>
-                <nz-input-group [nzPrefix]="prefixIconSearch">
-                    <input type="text" nz-input placeholder="Search authors..." [(ngModel)]="tableInput.searchValue"
-                        (ngModelChange)="onSearchChange()" />
-                </nz-input-group>
+    <nz-input-group
+      class="search-input"
+      [nzPrefix]="prefixIconSearch">
+      <input
+        nz-input
+        type="text"
+        placeholder="Search authors..."
+        [(ngModel)]="tableInput.searchValue"
+        (ngModelChange)="onSearchChange()" />
+    </nz-input-group>
+  </div>
 
-                <ng-template #prefixIconSearch>
-                    <nz-icon nzType="search" />
-                </ng-template>
-            </div>
+  <button
+    nz-button
+    nzType="primary"
+    nzSize="large"
+    (click)="navigateToCreate()">
+    <nz-icon nzType="plus" />
+    Create Author
+  </button>
+</div>
 
+<ng-template #prefixIconSearch>
+  <nz-icon nzType="search" />
+</ng-template>
 
-            <button nz-button nzType="dashed" (click)="navigateToCreate()">
-                <nz-icon nzType="plus" />
-                Create Author
-            </button>
-        </nz-space>
-    </div>
 
 
     <nz-table [nzLoading]="loading" [nzData]="authors" [nzFrontPagination]="false" [nzBordered]="true" nzSize="middle">

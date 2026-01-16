@@ -8,27 +8,31 @@
 ::ng-deep .ant-table table {
     table-layout: fixed;
 }
-
-.center-container-grid {
-    display: flex;
-    justify-content: center; /* Horizontal centering */
-    align-items: center;     /* Vertical centering */
-    min-height: 10px;       /* Give it height so 'center' has space to work */
-    width: 100%;
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  margin-bottom: 16px;
 }
 
-.content-to-center {
-    padding: 10px;
-    background-color: lightblue;
-    display: flex;           /* Centers the select and pagination internally */
-    align-items: center;
-    gap: 15px;               /* Adds space between the select and pagination */
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-.button-container {
-    display: flex;
-    justify-content: space-between; /* Pushes the button to the left */
-    width: 100%;
-    padding: 10px 15px;
+.toolbar-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
 }
 
+.search-input {
+  width: 260px;
+}
+
+/* Make primary action pop */
+button[nzType="primary"] {
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.35);
+}
