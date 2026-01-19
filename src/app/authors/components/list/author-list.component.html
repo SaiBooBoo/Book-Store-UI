@@ -6,11 +6,12 @@
 
     <nz-input-group
       class="search-input"
-      [nzPrefix]="prefixIconSearch">
+      [nzPrefix]="prefixIconSearch" nzSearch>
       <input
         nz-input
         type="text"
         placeholder="Search authors..."
+        (keyup.enter) = "onBlurrySearch($event.target.value)"
         [(ngModel)]="tableInput.searchValue"
         (ngModelChange)="onSearchChange()" />
     </nz-input-group>
@@ -32,7 +33,7 @@
 
 
 
-    <nz-table [nzLoading]="loading" [nzData]="authors" [nzFrontPagination]="false" [nzBordered]="true" nzSize="middle">
+    <nz-table [nzLoading]="loading" [nzData]="data" [nzFrontPagination]="false" [nzBordered]="true" nzSize="middle">
         <thead>
             <tr>
                 <th>ID</th>
@@ -45,7 +46,7 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let author of authors">
+            <tr *ngFor="let author of data">
                 <td>{{ author.id }}</td>
                 <td>{{ author.firstName }}</td>
                 <td>{{ author.lastName }}</td>
@@ -65,7 +66,7 @@
     <div class="center-container-grid">
         <div class="content-to-center">
             <nz-pagination [nzPageIndex]="tableInput.pageIndex" [nzPageSize]="tableInput.pageSize"
-                [nzTotal]="totalRecords" [nzShowSizeChanger]="true" [nzPageSizeOptions]="[5, 10, 20, 50]"
+                [nzTotal]="total" [nzShowSizeChanger]="true" [nzPageSizeOptions]="[5, 10, 20, 50]"
                 [nzShowTotal]="totalTpl" (nzPageIndexChange)="onPageChange($event)"
                 (nzPageSizeChange)="onPageSizeChange($event)">
             </nz-pagination>

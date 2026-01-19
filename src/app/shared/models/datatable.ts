@@ -6,7 +6,7 @@ export interface DataTableInput<T = any> {
 
   sortField?: string | null;
 
-  sortOrder?: string | null;
+  sortOrder?: 'ascend' | 'descend';
 
   queryCriteria?: T;
 
@@ -29,3 +29,8 @@ export interface DataTableOutput<T> {
   error?: string;
 
 } 
+
+export interface AuthorQueryCriteria {
+  blurry?: string;
+  createdDate?: [string, string];
+}

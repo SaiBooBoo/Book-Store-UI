@@ -4,6 +4,7 @@ export interface PageResponse<T> {
     page: {
         size: number;
         number: number;
+        queryCriteria?: T;
         totalElements: number;
         totalPages: number;
     }
