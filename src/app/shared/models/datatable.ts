@@ -12,7 +12,7 @@ export interface DataTableInput<T = any> {
 
   searchValue?: string | null;
 
-  draw?: number | null;
+  draw?: number;
 
 }
 

@@ -1,13 +1,13 @@
 import { Component, inject } from "@angular/core";
-import { FormBuilder, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthorService } from "../../services/author.service";
-import { Author } from "../../models/author.model";
 import { CommonModule } from "@angular/common";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzFormModule } from "ng-zorro-antd/form";
 import { NzInputModule } from "ng-zorro-antd/input";
-import { Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
+import { Router } from "@angular/router";
+
 
 
 @Component({
@@ -15,55 +15,52 @@ import { NzMessageService } from "ng-zorro-antd/message";
     templateUrl: './author-create.component.html',
     standalone: true,
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        NzFormModule,
-        NzButtonModule,
-        NzInputModule,
-            ]
+        ReactiveFormsModule, NzFormModule, CommonModule, FormsModule, NzFormModule, NzInputModule, NzButtonModule
+    ]
 })
 export class AuthorCreateComponent {
-   
-    private fb = inject(NonNullableFormBuilder);
-    private router = inject(Router);
-    private authorService = inject(AuthorService);
-    private message = inject(NzMessageService);
 
-    // fN, lN, email, dob, bio
-    validateForm = this.fb.group({
-        firstName: this.fb.control('', [Validators.required]),
-        lastName: this.fb.control('', [Validators.required]),
-        email: this.fb.control('', [Validators.required]),
-        dateOfBirth: this.fb.control('')
-    })
+    form: FormGroup;
+    errors: Record<string, string> = {};
 
-    submitForm(): void {
-        if(this.validateForm.invalid) {
-            Object.values(this.validateForm.controls).forEach(control => {
-                control.markAsDirty();
-                control.updateValueAndValidity({ onlySelf: true});
-            });
-            return;
-        }
 
-        const payload = this.validateForm.value;
+    constructor(
+    private fb: FormBuilder,
+    private authorService: AuthorService,
+    private message: NzMessageService,
+    private router: Router
+  ) {
+    this.form = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      bio: ['']
+    });
+  }
 
-        this.authorService.createAuthor(payload).subscribe({
-            next: () => {
-                this.message.success('Author created successfully', {nzDuration: 4000})
-                this.validateForm.reset({});
-            },
-            error: err => {
-                this.message.error('Failed to create new Author');
-            }
-        })
+   submit(): void {
+    this.errors = {}; // reset previous errors
+    if (this.form.invalid) {
+        this.message.error('Please fill in all required fields correctly.');
+      return;
     }
 
-    resetForm(): void {
-        this.validateForm.reset({});
-    }
-    
-    cancel(): void {
-        this.router.navigate(['/admin/authors']);
-    }
+  
+    this.authorService.createAuthor(this.form.value).subscribe({
+      next: (res) => {
+        this.message.success('Author created successfully');
+        this.form.reset();
+      },
+      error: (err) => {
+        if (err.status === 400 && err.error){
+        this.errors = err.error;
+      } else {
+        this.message.error(err.error?.error || 'An error occurred while creating the author');
+      }}
+    });
+  }
+
+  cancel() {
+    this.router.navigate(['/admin/authors']);
+  }
 }

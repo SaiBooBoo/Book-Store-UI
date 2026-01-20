@@ -1,86 +1,80 @@
 <div class="d-flex container justify-content-between align-items-center mb-3">
 
-   <div class="toolbar">
-  <div class="toolbar-left">
-    <h2 class="toolbar-title">Authors</h2>
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <h2 class="toolbar-title">Authors</h2>
 
-    <nz-input-group
-      class="search-input"
-      [nzPrefix]="prefixIconSearch" nzSearch>
-      <input
-        nz-input
-        type="text"
-        placeholder="Search authors..."
-        (keyup.enter) = "onBlurrySearch($event.target.value)"
-        [(ngModel)]="tableInput.searchValue"
-        (ngModelChange)="onSearchChange()" />
-    </nz-input-group>
-  </div>
+      <nz-input-group class="search-input" [nzPrefix]="prefixIconSearch" nzSearch>
+        <input
+          nz-input
+          type="text"
+          placeholder="Search authors..."
+          (keyup.enter)="onBlurrySearch($event.target.value)"
+          [(ngModel)]="tableInput.searchValue"
+          (ngModelChange)="onSearchChange()" />
+      </nz-input-group>
 
-  <button
-    nz-button
-    nzType="primary"
-    nzSize="large"
-    (click)="navigateToCreate()">
-    <nz-icon nzType="plus" />
-    Create Author
-  </button>
-</div>
-
-<ng-template #prefixIconSearch>
+      <ng-template #prefixIconSearch>
   <nz-icon nzType="search" />
 </ng-template>
-
-
-
-    <nz-table [nzLoading]="loading" [nzData]="data" [nzFrontPagination]="false" [nzBordered]="true" nzSize="middle">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th nzColumnKey="firstName" nzShowSort (nzSortOrderChange)="onSort('firstName', $event)">First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Bio</th>
-                <th nzWidth="180px">Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr *ngFor="let author of data">
-                <td>{{ author.id }}</td>
-                <td>{{ author.firstName }}</td>
-                <td>{{ author.lastName }}</td>
-                <td>{{ author.email }}</td>
-                <td class="truncate-text">{{ author.bio }}</td>
-
-                <td>
-                    <a><nz-icon nzType="edit" nzTheme="outline" />Update</a>
-                    <nz-divider nzType="vertical"></nz-divider>
-                    <a (click)="deleteAuthor(author.id)" nzDanger><nz-icon nzType="delete"
-                            nzTheme="outline" />Delete</a>
-                </td>
-            </tr>
-        </tbody>
-    </nz-table>
-
-    <div class="center-container-grid">
-        <div class="content-to-center">
-            <nz-pagination [nzPageIndex]="tableInput.pageIndex" [nzPageSize]="tableInput.pageSize"
-                [nzTotal]="total" [nzShowSizeChanger]="true" [nzPageSizeOptions]="[5, 10, 20, 50]"
-                [nzShowTotal]="totalTpl" (nzPageIndexChange)="onPageChange($event)"
-                (nzPageSizeChange)="onPageSizeChange($event)">
-            </nz-pagination>
-        </div>
-
-        <ng-template #totalTpl let-total let-range="range">
-            Showing {{ range[0] }}–{{ range[1] }}
-            of {{ total }} items ·
-            Page {{ tableInput.pageIndex }}
-            of {{ getTotalPages(total) }}
-        </ng-template>
-
-
     </div>
 
+    <button nz-button nzType="primary" nzSize="large" (click)="navigateToCreate()">
+      <nz-icon nzType="plus"></nz-icon>
+      Create Author
+    </button>
+  </div>
+</div>
 
+<nz-table
+  [nzLoading]="loading"
+  [nzData]="data"
+  [nzFrontPagination]="false"
+  [nzBordered]="true"
+  nzSize="middle"
+>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th nzColumnKey="firstName" nzShowSort (nzSortOrderChange)="onSort('firstName', $event)">First Name</th>
+      <th>Last Name</th>
+      <th>Email</th>
+      <th>Bio</th>
+      <th nzWidth="180px">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let author of data">
+      <td>{{ author.id }}</td>
+      <td>{{ author.firstName }}</td>
+      <td>{{ author.lastName }}</td>
+      <td>{{ author.email }}</td>
+      <td class="truncate-text">{{ author.bio }}</td>
+      <td>
+        <a><nz-icon nzType="edit" nzTheme="outline"></nz-icon> Update</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a (click)="confirmDelete(author.id)" nzDanger><nz-icon nzType="delete" nzTheme="outline"></nz-icon> Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<div class="center-container-grid">
+  <div class="content-to-center">
+    <nz-pagination
+      [nzPageIndex]="tableInput.pageIndex"
+      [nzPageSize]="tableInput.pageSize"
+      [nzTotal]="total"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[5,10,20,50]"
+      [nzShowTotal]="totalTpl"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)">
+    </nz-pagination>
+  </div>
+
+  <ng-template #totalTpl let-total let-range="range">
+    Showing {{ range[0] }}–{{ range[1] }} of {{ total }} items · Page {{ tableInput.pageIndex }} of {{ getTotalPages() }}
+  </ng-template>
 </div>

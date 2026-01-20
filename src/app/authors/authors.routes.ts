@@ -5,6 +5,7 @@ import { AuthorCreateComponent } from "./components/create/author-create.compone
 
 export const AUTHOR_ROUTES: Routes = [
     { path: '', component: AuthorListComponent },
+    { path: 'new', component: AuthorCreateComponent},
     { path: ':id', component: AuthorDetailComponent},
-    { path: '', component: AuthorCreateComponent}
+   
 ]

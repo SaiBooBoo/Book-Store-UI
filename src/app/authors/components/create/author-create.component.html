@@ -1,0 +1,31 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <nz-form-item>
+    <nz-form-label [nzFor]="'firstName'">First Name</nz-form-label>
+    <nz-form-control [nzErrorTip]="errors['firstName']">
+      <input nz-input formControlName="firstName" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzFor]="'lastName'">Last Name</nz-form-label>
+    <nz-form-control [nzErrorTip]="errors['lastName']">
+      <input nz-input formControlName="lastName" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzFor]="'email'">Email</nz-form-label>
+    <nz-form-control [nzErrorTip]="errors['email']">
+      <input nz-input formControlName="email" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzFor]="'bio'">Bio</nz-form-label>
+    <nz-form-control>
+      <textarea nz-input formControlName="bio"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <button nz-button nzType="primary">Create Author</button>
+</form>

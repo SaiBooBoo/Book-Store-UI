@@ -40,6 +40,14 @@
           <nz-icon nzType="user" />
           <span>Authors</span>
         </li>
+
+        <li
+          nz-menu-item
+          routerLink="/admin/authors/new"
+          routerLinkActive="ant-menu-item-selected"
+          [routerLinkActiveOptions]="{ exact: true }">
+          <nz-icon nzType="tags" />
+          <span>Author New</span>
       </ul>
     </nz-sider>
 

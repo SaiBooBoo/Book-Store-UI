@@ -17,46 +17,20 @@ export class AuthorService {
     constructor(private http: HttpClient) {}
 
 
-        // getAuthorsTable(
-        //     input: DataTableInput<DataTableInput>
-        // ): Observable<DataTableOutput<Author>> {
-        //     return this.http.post<DataTableOutput<Author>>(
-        //         `${this.API_URL}/datatable`,
-        //         input
-        //     );
-        // }
-        
-        // getAuthors(
-        //     page: number = 0,
-        //     size: number = 5,
-        //     sortBy: string = 'id',
-        //     direction: string = 'asc'
-        // ) : Observable<PageResponse<Author>> {
-
-        //     const params = new HttpParams()
-        //     .set('page', page)
-        //     .set('size', size)
-        //     .set('sortBy', sortBy)
-        //     .set('direction', direction);
-        //     return this.http.get<PageResponse<Author>>(this.API_URL, {params});
-        // }
-
     createAuthor(payload: any) {
         return this.http.post(environment.apiBaseUrl + API_ENDPOINTS.ADMIN.AUTHORS.CREATE, payload);
     }
     
-       
-    deleteAuthor(authorId: number): Observable<void> {
+
+    deleteAuthor(authorId: number) : Observable<void> {
         return this.http.delete<void>(environment.apiBaseUrl + API_ENDPOINTS.ADMIN.AUTHORS.DELETE(authorId));
     }
-
-   /* search(input: DataTableInput): Observable<DataTableOutput<Author>> {
-        return this.http.post<DataTableOutput<Author>>(`${this.API_URL}`, input);
-    } */
 
     datatable(input: DataTableInput<AuthorQueryCriteria>): Observable<DataTableOutput<Author>> {
         return this.http.post<DataTableOutput<Author>>(this.API_URL+ '/datatable', input); 
     }
+
+
 
 
 }
