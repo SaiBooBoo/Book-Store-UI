@@ -91,7 +91,15 @@ import { NzMessageService } from 'ng-zorro-antd/message';
         <td>{{ author.email }}</td>
         <td class="truncate-text">{{ author.bio }}</td>
         <td>
-          <a><nz-icon nzType="edit" nzTheme="outline"></nz-icon> Update</a>
+          <button 
+    nz-button 
+    nzType="link" 
+    (click)="editAuthor(author.id)"
+    aria-label="Edit author">
+    <mat-icon nz-icon nzType="edit"></mat-icon>
+    Update
+  </button>
+
           <nz-divider nzType="vertical"></nz-divider>
           <a (click)="deleteAuthor(author.id)" nzDanger>
             <nz-icon nzType="delete" nzTheme="outline"></nz-icon> Delete
@@ -234,6 +242,12 @@ export class AuthorListComponent implements OnInit, OnDestroy {
     this.tableInput.sortOrder = (order as 'ascend' | 'descend') ?? undefined;
     this.tableInput.pageIndex = 1;
     this.loadData(true); // reset draw on sort
+  }
+
+  editAuthor(authorId: number): void {
+    if (!authorId) return;
+
+    this.router.navigate(['/admin/authors', authorId, 'edit'])
   }
 
   navigateToCreate(): void {

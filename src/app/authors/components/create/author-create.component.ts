@@ -1,66 +1,113 @@
-import { Component, inject } from "@angular/core";
-import { FormBuilder, FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit, inject } from "@angular/core";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from "@angular/router";
+import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
+import { map, catchError, debounceTime, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { NzMessageService } from "ng-zorro-antd/message";
+
 import { AuthorService } from "../../services/author.service";
+import { applyServerErrors } from "../../../shared/components/utils/apply-server-errors.util";
 import { CommonModule } from "@angular/common";
-import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzFormModule } from "ng-zorro-antd/form";
 import { NzInputModule } from "ng-zorro-antd/input";
-import { NzMessageService } from "ng-zorro-antd/message";
-import { Router } from "@angular/router";
-
-
+import { NzButtonModule } from "ng-zorro-antd/button";
 
 @Component({
-    selector: 'app-author-create',
-    templateUrl: './author-create.component.html',
-    standalone: true,
-    imports: [
-        ReactiveFormsModule, NzFormModule, CommonModule, FormsModule, NzFormModule, NzInputModule, NzButtonModule
-    ]
+  selector: 'app-author-create',
+  standalone: true,
+  templateUrl: './author-create.component.html',
+  imports: [ CommonModule,
+  FormsModule,
+  ReactiveFormsModule, 
+  NzFormModule,
+  NzInputModule,
+  NzButtonModule,]
 })
-export class AuthorCreateComponent {
+export class AuthorCreateComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private authorService = inject(AuthorService);
+  private message = inject(NzMessageService);
+  private router = inject(Router);
 
-    form: FormGroup;
-    errors: Record<string, string> = {};
+  authorForm!: FormGroup;
+  submitting = false;
 
-
-    constructor(
-    private fb: FormBuilder,
-    private authorService: AuthorService,
-    private message: NzMessageService,
-    private router: Router
-  ) {
-    this.form = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      bio: ['']
+  ngOnInit(): void {
+    this.authorForm = this.fb.group({
+      firstName: ['', [Validators.required, Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.email],
+    [this.emailDuplicateValidator()]],
+      bio: ['', [Validators.maxLength(500)]],
     });
   }
 
-   submit(): void {
-    this.errors = {}; // reset previous errors
-    if (this.form.invalid) {
-        this.message.error('Please fill in all required fields correctly.');
+  /** Submit form */
+  submit(): void {
+    if (this.authorForm.invalid) {
+      this.authorForm.markAllAsTouched();
+      this.authorForm.updateValueAndValidity();
       return;
     }
 
-  
-    this.authorService.createAuthor(this.form.value).subscribe({
-      next: (res) => {
+    this.submitting = true;
+    this.clearServerErrors();
+
+    this.authorService.createAuthor(this.authorForm.value).subscribe({
+      next: () => {
         this.message.success('Author created successfully');
-        this.form.reset();
+        this.router.navigate(['/admin/authors']);
       },
       error: (err) => {
-        if (err.status === 400 && err.error){
-        this.errors = err.error;
-      } else {
-        this.message.error(err.error?.error || 'An error occurred while creating the author');
-      }}
+        this.submitting = false;
+        this.handleError(err);
+      }
     });
   }
 
-  cancel() {
+  /** Handle backend errors */
+  private handleError(err: any): void {
+    const { status, error } = err;
+
+    if (status === 400 && error?.fieldErrors) {
+      applyServerErrors(this.authorForm, error.fieldErrors);
+    } 
+    else if (status === 409) {
+      // Email duplication
+      this.authorForm.get('email')?.setErrors({ duplicate: error?.message || 'Email already exists' });
+    } 
+    else {
+      console.error('Submission error', err);
+    }
+  }
+
+  /** Remove server errors while editing */
+  private clearServerErrors(): void {
+    Object.values(this.authorForm.controls).forEach(control => {
+      if (control.errors) {
+        const { serverError, duplicate, ...rest } = control.errors;
+        control.setErrors(Object.keys(rest).length ? rest : null);
+      }
+    });
+  }
+
+  emailDuplicateValidator(): AsyncValidatorFn {
+  return (control: AbstractControl) => {
+    if (!control.value) return of(null); // skip empty
+
+    return of(control.value).pipe(
+      debounceTime(500), // wait 0.5s after user stops typing
+      switchMap(email =>
+        this.authorService.checkEmailExists(email) // call backend
+      ),
+      map(exists => (exists ? { duplicate: 'This email is already registered' } : null)),
+      catchError(() => of(null)) // fail silently if server error
+    );
+  };
+}
+
+  cancel(): void {
     this.router.navigate(['/admin/authors']);
   }
 }

@@ -1,0 +1,6 @@
+:host { display: block; max-width: 680px; }
+
+.error-text {
+  color: #ff4d4f;
+  font-size: 12px;
+}

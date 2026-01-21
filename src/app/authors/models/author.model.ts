@@ -12,3 +12,10 @@ export interface AuthorFilter {
     lastName?: string;
     email?: string;
 }
+
+export interface BackendValidationError {
+    timestamp: string;
+    status: number;
+    message?: string;
+    fieldErrors?: Record<string, string>;
+}

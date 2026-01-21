@@ -1,10 +1,9 @@
-<h2>Create New Author Form</h2>
-
+<h2>Update Author</h2>
 <form nz-form [formGroup]="authorForm" (ngSubmit)="submit()">
 
   <nz-form-item>
-    <nz-form-label [nzFor]="'firstName'" nzRequired="">First Name</nz-form-label>
-    <nz-form-control [nzValidateStatus]="authorForm.get('firstName')!" nzHasFeedback>
+    <nz-form-label [nzFor]="'firstName'" >First Name</nz-form-label>
+    <nz-form-control [nzValidateStatus]="authorForm.get('firstName')!">
       <input nz-input id="firstName" formControlName="firstName" />
       <ng-container *ngIf="authorForm.get('firstName')?.touched || authorForm.get('firstName')?.dirty">
         <div nz-form-explain *ngIf="authorForm.get('firstName')?.errors?.['required']" class="error-text">
@@ -62,20 +61,24 @@
     </nz-form-control>
   </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-control>
-      <button nz-button nzType="primary" [disabled]="submitting || authorForm.pending ">
-        {{ submitting ? 'Saving...' : 'Save' }}
-      </button>
-      <button nz-button nzType="default" (click)="cancel()" [disabled]="submitting" style="margin-left: 8px;">
-        Cancel
-      </button>
-    </nz-form-control>
-  </nz-form-item>
 
+<nz-form-item>
+    <nz-form-control>
+        <button nz-button nzType="primary" [disabled]="submitting || authorForm.pending">
+            {{ submitting ? 'Updating...' : 'Update' }}
+        </button>
+
+        <button 
+            nz-button nzType="default"
+            (click)="cancel()"
+            [disabled]="submitting"
+            style="margin-left: 8px">
+            Cancel
+        </button>
+    </nz-form-control>
+</nz-form-item>
 </form>
 
-<!-- Styles for error text -->
 <style>
   .error-text {
     color: #ff4d4f;

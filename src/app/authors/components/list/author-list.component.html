@@ -51,11 +51,28 @@
       <td>{{ author.lastName }}</td>
       <td>{{ author.email }}</td>
       <td class="truncate-text">{{ author.bio }}</td>
-      <td>
-        <a><nz-icon nzType="edit" nzTheme="outline"></nz-icon> Update</a>
-        <nz-divider nzType="vertical"></nz-divider>
-        <a (click)="confirmDelete(author.id)" nzDanger><nz-icon nzType="delete" nzTheme="outline"></nz-icon> Delete</a>
-      </td>
+     <td>
+  <button 
+    nz-button 
+    nzType="link" 
+    (click)="editAuthor(author.id)"
+    aria-label="Edit author">
+    <mat-icon nz-icon nzType="edit"></mat-icon>
+    Update
+  </button>
+
+  <nz-divider nzType="vertical"></nz-divider>
+
+  <button 
+    nz-button 
+    nzType="link" 
+    nzDanger 
+    (click)="confirmDelete(author)"
+    aria-label="Delete author">
+    <mat-icon nz-icon nzType="delete"></mat-icon>
+    Delete
+  </button>
+</td>
     </tr>
   </tbody>
 </nz-table>
