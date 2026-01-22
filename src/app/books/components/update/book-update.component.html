@@ -1,5 +1,5 @@
-<h2 style="display: flex; align-items: center;">Create New Book Form</h2>
-<form nz-form nzLayout="horizontal" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+<h3>Update Book Form</h3>
+<form nz-form nzLayout="horizontal" [formGroup]="bookForm" (ngSubmit)="submitForm()">
     <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="title">Title</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Title is required">
@@ -28,13 +28,13 @@
     </nz-form-item>
     <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="price">Price</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="validateForm.get('price')!">
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="bookForm.get('price')!">
             <input type="number" nz-input formControlName="price" id="price" placeholder="Enter the price of the book" >
-            <ng-container *ngIf="validateForm.get('price')?.touched || validateForm.get('price')?.dirty">
-                <div nz-form-explain *ngIf="validateForm.get('price')?.errors?.['required']" class="error-text">
+            <ng-container *ngIf="bookForm.get('price')?.touched || bookForm.get('price')?.dirty">
+                <div nz-form-explain *ngIf="bookForm.get('price')?.errors?.['required']" class="error-text">
                     <span>Price is required</span>
                 </div>
-                @if (validateForm.get('price')?.errors?.['min']) {
+                @if (bookForm.get('price')?.errors?.['min']) {
                     <span class="error-text">Nothing is free of charge my friend</span>
                 }
 
@@ -43,13 +43,13 @@
     </nz-form-item>
     <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="stock">Stock</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="validateForm.get('stock')!">
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="bookForm.get('stock')!">
             <input type="number" nz-input formControlName="stock" id="stock" placeholder="Enter amount of books you have in storage">
-            <ng-container *ngIf="validateForm.get('stock')?.touched || validateForm.get('stock')?.dirty">
-                <div nz-form-explain *ngIf="validateForm.get('stock')?.errors?.['required']" class="error-text">
+            <ng-container *ngIf="bookForm.get('stock')?.touched || bookForm.get('stock')?.dirty">
+                <div nz-form-explain *ngIf="bookForm.get('stock')?.errors?.['required']" class="error-text">
                     Stock is required
                 </div>
-                <div nz-form-explain *ngIf="validateForm.get('stock')?.errors?.['min']" class="error-text">
+                <div nz-form-explain *ngIf="bookForm.get('stock')?.errors?.['min']" class="error-text">
                     Stock must be 0 or greater
                 </div>
             </ng-container>
@@ -65,10 +65,10 @@
     </nz-form-item>
     <nz-form-item>
         <nz-form-control [nzOffset]="6" [nzSpan]="14">
-            <button nz-button nzType="primary" htmlType="submit">
-                Create Book
-            </button>
-            <button nz-button nzType="default" style="margin-left: 8px" type="button" (click)="resetForm()">
+            <button nz-button nzType="primary" (click)="submitForm()" [disabled]="submitting || bookForm.pending">
+            {{ submitting ? 'Updating...' : 'Update' }}
+        </button>
+            <button nz-button nzType="default" style="margin-left: 8px" type="button" (click)="resetform()">
                 Reset
             </button>
             <button nz-button nzType="default" style="margin-left: 8px" type="button" (click)="cancel()">

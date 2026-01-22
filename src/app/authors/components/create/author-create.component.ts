@@ -43,7 +43,6 @@ export class AuthorCreateComponent implements OnInit {
     });
   }
 
-  /** Submit form */
   submit(): void {
     if (this.authorForm.invalid) {
       this.authorForm.markAllAsTouched();
@@ -94,15 +93,15 @@ export class AuthorCreateComponent implements OnInit {
 
   emailDuplicateValidator(): AsyncValidatorFn {
   return (control: AbstractControl) => {
-    if (!control.value) return of(null); // skip empty
+    if (!control.value) return of(null); 
 
     return of(control.value).pipe(
-      debounceTime(500), // wait 0.5s after user stops typing
+      debounceTime(500), 
       switchMap(email =>
-        this.authorService.checkEmailExists(email) // call backend
+        this.authorService.checkEmailExists(email) 
       ),
       map(exists => (exists ? { duplicate: 'This email is already registered' } : null)),
-      catchError(() => of(null)) // fail silently if server error
+      catchError(() => of(null)) 
     );
   };
 }

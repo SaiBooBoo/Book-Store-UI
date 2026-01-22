@@ -2,7 +2,7 @@
 
   <div class="button-container">
       <h3 class="padding: 10px">Books</h3>
-      <button nz-button nzType="dashed" (click)="navigateToCreate()">
+      <button nz-button nzType="primary" (click)="navigateToCreate()">
         <nz-icon nzType="plus" />
         Create Book
       </button>
@@ -32,8 +32,7 @@
         <td>{{ book.stock }}</td>
         <td>{{ book.authorName }}</td>
         <td>
-          <a><nz-icon nzType="edit" nzTheme="outline" />Update</a>
-          <nz-divider nzType="vertical"></nz-divider>
+         <button nz-button nzType="link" (click)="navigateToUpdate(book.id)" aria-label="Edit"><mat-icon nz-icon nzType="edit"></mat-icon></button>
           <a (click)="deleteBook(book.id)" nzDanger><nz-icon nzType="delete" nzTheme="outline" />Delete</a>
         </td>
       </tr>

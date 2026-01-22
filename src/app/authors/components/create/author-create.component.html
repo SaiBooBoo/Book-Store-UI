@@ -1,11 +1,11 @@
 <h2>Create New Author Form</h2>
 
-<form nz-form [formGroup]="authorForm" (ngSubmit)="submit()">
+<form nzLayout="horizontal" nz-form [formGroup]="authorForm" (ngSubmit)="submit()">
 
   <nz-form-item>
     <nz-form-label [nzFor]="'firstName'" nzRequired="">First Name</nz-form-label>
     <nz-form-control [nzValidateStatus]="authorForm.get('firstName')!" nzHasFeedback>
-      <input nz-input id="firstName" formControlName="firstName" />
+      <input nz-input id="firstName" formControlName="firstName" placeholder="Enter Author's first name" />
       <ng-container *ngIf="authorForm.get('firstName')?.touched || authorForm.get('firstName')?.dirty">
         <div nz-form-explain *ngIf="authorForm.get('firstName')?.errors?.['required']" class="error-text">
           First name is required
@@ -20,7 +20,7 @@
   <nz-form-item>
     <nz-form-label [nzFor]="'lastName'" nzRequired>Last Name</nz-form-label>
     <nz-form-control [nzValidateStatus]="authorForm.get('lastName')!">
-      <input nz-input formControlName="lastName" />
+      <input nz-input formControlName="lastName" placeholder="Enter Author's last name"/>
       <ng-container *ngIf="authorForm.get('lastName')?.touched || authorForm.get('lastName')?.dirty">
         <div nz-form-explain *ngIf="authorForm.get('lastName')?.errors?.['required']" class="error-text">
           Last name is required
@@ -35,7 +35,7 @@
   <nz-form-item>
     <nz-form-label nzFor="email" nzRequired>Email</nz-form-label>
     <nz-form-control [nzValidateStatus]="authorForm.get('email')!">
-      <input nz-input id="email" formControlName="email" />
+      <input nz-input id="email" formControlName="email" placeholder="Enter Author's for email" />
       <ng-container *ngIf="authorForm.get('email')?.touched || authorForm.get('email')?.dirty">
         <div nz-form-explain *ngIf="authorForm.get('email')?.errors?.['required']" class="error-text">
           Email is required
@@ -54,7 +54,7 @@
     <nz-form-label nzFor="bio">Bio</nz-form-label>
     <nz-form-control [nzValidateStatus]="authorForm.get('bio')!">
       <textarea nz-input id="bio" formControlName="bio" rows="4"></textarea>
-      <ng-container *ngIf="authorForm.get('bio')?.touched || authorForm.get('bio')?.dirty">
+      <ng-container *ngIf="authorForm.get('bio')?.touched || authorForm.get('bio')?.dirty" placeholder="Author's bio goes here">
         <div nz-form-explain *ngIf="authorForm.get('bio')?.errors?.['maxlength']" class="error-text">
           Max 500 characters
         </div>
@@ -75,7 +75,6 @@
 
 </form>
 
-<!-- Styles for error text -->
 <style>
   .error-text {
     color: #ff4d4f;

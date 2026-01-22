@@ -36,6 +36,15 @@ export class BookService {
     }
 
     deleteBook(id: number): Observable<void> {
-        return this.http.delete<void>(environment.apiBaseUrl + API_ENDPOINTS.ADMIN.BOOKS.DELETE);
+        return this.http.delete<void>(environment.apiBaseUrl + `/admin/book/${id}`);
     }
-}
+
+    updateBook(id: number, payload: any) {
+        return this.http.put( `http://localhost:8080/api/admin/book/${id}`, payload);
+    }
+
+    getBookById(id: number) {
+        return this.http.get<any>(`http://localhost:8080/api/admin/book/${id}`);     
+    }
+    
+}  

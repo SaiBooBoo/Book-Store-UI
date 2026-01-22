@@ -9,5 +9,4 @@ export const AUTHOR_ROUTES: Routes = [
     { path: 'new', component: AuthorCreateComponent},
     { path: ':id/edit', component: AuthorUpdateComponent},
     { path: ':id', component: AuthorDetailComponent},
-   
 ]

@@ -48,14 +48,13 @@ export class BookCreateComponent {
 
 
     ngOnInit(): void {
+        this.resetForm
         this.http.get<Author[]>(this.GET_ALL_AUTHORS_URL)
         .subscribe(data => this.authors = data);
         this.loadAuthors();
     }
 
     loadAuthors(): void {
-        this.authorLoading = true;
-
         this.http.get<Author[]>(this.GET_ALL_AUTHORS_URL)
         .subscribe({
             next: data => {
@@ -72,8 +71,8 @@ export class BookCreateComponent {
         title: this.fb.control('', [Validators.required]),
         authorId: this.fb.control<number | null>(null, Validators.required),
         isbn: this.fb.control('', [Validators.required]),
-        price: this.fb.control(0, [Validators.required]),
-        stock: this.fb.control(0, [Validators.required]),
+        price: this.fb.control(0, [ Validators.min(0)]),
+        stock: this.fb.control(0, [ Validators.min(0)]),
         description: this.fb.control(''),
     })
 
@@ -94,7 +93,7 @@ export class BookCreateComponent {
                 this.message.success('Book created successfully', {nzDuration: 4000})
                 this.validateForm.reset({price: 0, stock: 0});
             },
-            error: err => {
+            error: () => {
                this.message.error('Failed to create book');
             },
         })

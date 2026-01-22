@@ -19,7 +19,6 @@ import { Subscription, timer } from 'rxjs';
 import { AuthorService } from '../../services/author.service';
 import { Author } from '../../models/author.model';
 import { AuthorQueryCriteria, DataTableInput, DataTableOutput } from '../../../shared/models/datatable';
-import { nzTypeDefinition } from 'ng-zorro-antd/graph';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
@@ -179,7 +178,7 @@ export class AuthorListComponent implements OnInit, OnDestroy {
     if (this.tableInput.searchValue?.trim()) {
       criteria.blurry = this.tableInput.searchValue.trim();
     } else {
-      delete (criteria as any).blurry;
+      delete (criteria as any).blurry; //??
     }
     return criteria;
   }
@@ -246,7 +245,6 @@ export class AuthorListComponent implements OnInit, OnDestroy {
 
   editAuthor(authorId: number): void {
     if (!authorId) return;
-
     this.router.navigate(['/admin/authors', authorId, 'edit'])
   }
 
@@ -254,6 +252,10 @@ export class AuthorListComponent implements OnInit, OnDestroy {
     this.router.navigate(['new'], { relativeTo: this.route });
   }
  deleteAuthor(authorId: number): void {
+   if (!confirm("Are you sure you want to delete this author?")) {
+            return;
+        }
+
   this.authorService.deleteAuthor(authorId).subscribe({
     next: () => {
       this.message.success('Author deleted successfully');

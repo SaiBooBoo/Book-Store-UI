@@ -50,24 +50,6 @@ export class BookListComponent implements OnInit {
         this.isLoading = true;
 
         const backendPage = this.pageIndex - 1;
-        // const datatableInput = {
-        //     pageIndex: ;
-
-        //     pageSize: ;
-
-        //     sortField: string | null;
-
-        //     sortOrder: string | null;
-
-        //     queryCriteria?: {
-
-        //     };
-
-        //     searchValue?: string | null;
-        // }
-
-
-
         this.bookService.getBooks(backendPage).subscribe({
             next: (data) => {
                 this.books = data.content;
@@ -96,6 +78,11 @@ export class BookListComponent implements OnInit {
 
     navigateToCreate(): void {
         this.router.navigate(['/admin/books/new'])
+    }
+
+    navigateToUpdate(bookId: number): void {
+        if (!bookId) return;
+        this.router.navigate([`/admin/books/${bookId}/edit`])
     }
 
     deleteBook(bookId: number): void {

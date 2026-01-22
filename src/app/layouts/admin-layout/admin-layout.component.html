@@ -48,6 +48,16 @@
           [routerLinkActiveOptions]="{ exact: true }">
           <nz-icon nzType="tags" />
           <span>Create Author</span>
+        </li>
+
+        <li
+          nz-menu-item
+          routerLink="/admin/books/new"
+          routerLinkActive="ant-menu-item-selected"
+          [routerLinkActiveOptions]="{ exact: true}">
+          <nz-icon nzType="file-add" nzTheme="outline" />
+          <span>Create Book</span>
+        </li>
       </ul>
     </nz-sider>
 
