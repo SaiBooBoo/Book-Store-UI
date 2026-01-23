@@ -5,13 +5,14 @@ import { Book } from "../../books/model/book.model";
 import { PageResponse } from "../../shared/models/page.model";
 import { environment } from "../../environments/environment";
 import { API_ENDPOINTS } from "../../core/constants/api-endpoints";
+import { Author } from "../../authors/models/author.model";
+import { BookQueryCriteria, DataTableInput, DataTableOutput } from "../../shared/models/datatable";
 
 
 @Injectable({
     providedIn: 'root'
 })
 export class BookService {
-
 
     constructor(private http: HttpClient) {}
 
@@ -47,4 +48,13 @@ export class BookService {
         return this.http.get<any>(`http://localhost:8080/api/admin/book/${id}`);     
     }
     
+    public GET_ALL_AUTHORS_URL = "http://localhost:8080/api/admin/authors/all";
+    
+    getAll(): Observable<Author[]> {
+        return this.http.get<Author[]>('GET_ALL_AUTHORS_URL');
+    }
+
+    datatableBook (input: DataTableInput<BookQueryCriteria>): Observable<DataTableOutput<Book>> {
+        return this.http.post<DataTableOutput<Book>>('http://localhost:8080/api/admin/books/datatable',input);
+    }
 }  

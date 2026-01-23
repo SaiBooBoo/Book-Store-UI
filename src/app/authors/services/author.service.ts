@@ -6,7 +6,8 @@ import { Author, AuthorFilter } from "../models/author.model";
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { API_ENDPOINTS } from "../../core/constants/api-endpoints";
-import { AuthorQueryCriteria, DataTableInput, DataTableOutput } from "../../shared/models/datatable";
+import { AuthorQueryCriteria, BookQueryCriteria, DataTableInput, DataTableOutput } from "../../shared/models/datatable";
+import { Book } from "../../books/model/book.model";
 
 @Injectable({
     providedIn: 'root'
@@ -26,7 +27,7 @@ export class AuthorService {
         return this.http.delete<void>(environment.apiBaseUrl + "/admin/author/delete/" + authorId);
     }
 
-    datatable(input: DataTableInput<AuthorQueryCriteria>): Observable<DataTableOutput<Author>> {
+    datatable (input: DataTableInput<AuthorQueryCriteria>): Observable<DataTableOutput<Author>> {
         return this.http.post<DataTableOutput<Author>>(this.API_URL + '/datatable', input);
     }
 

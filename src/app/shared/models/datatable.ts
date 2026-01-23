@@ -34,3 +34,8 @@ export interface AuthorQueryCriteria {
   blurry?: string;
   createdDate?: [string, string];
 }
+
+export interface BookQueryCriteria {
+  blurry?: string;
+  createdDate?: [string, string];
+}

@@ -1,54 +1,83 @@
 <div class="d-flex container justify-content-between align-items-center mb-3">
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <h2 class="toolbar-title">Books</h2>
 
-  <div class="button-container">
-      <h3 class="padding: 10px">Books</h3>
-      <button nz-button nzType="primary" (click)="navigateToCreate()">
-        <nz-icon nzType="plus" />
-        Create Book
-      </button>
-  </div>
-
-  <nz-table [nzData]="books" [nzLoading]="isLoading" [nzFrontPagination]="false" [nzBordered]="true"
-    nzSize="middle">
-
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>ISBN</th>
-        <th>Price</th>
-        <th>Stock</th>
-        <th>Author</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let book of books">
-        <td>{{ book.id }}</td>
-        <td>{{ book.title }}</td>
-        <td>{{ book.isbn }}</td>
-        <td>{{ book.price | currency }}</td>
-        <td>{{ book.stock }}</td>
-        <td>{{ book.authorName }}</td>
-        <td>
-         <button nz-button nzType="link" (click)="navigateToUpdate(book.id)" aria-label="Edit"><mat-icon nz-icon nzType="edit"></mat-icon></button>
-          <a (click)="deleteBook(book.id)" nzDanger><nz-icon nzType="delete" nzTheme="outline" />Delete</a>
-        </td>
-      </tr>
-
-  </nz-table>
-
-  <div class="center-container-grid">
-    <div class="content-to-center">
-      <span class="me-2">Row per page:</span>
-      <nz-select [ngModel]="pageSize" (ngModelChange)="onPageSizeChange($event)" style="width: 90px">
-        <nz-option *ngFor="let size of pageSizeOptions" [nzValue]="size" [nzLabel]="size">
-        </nz-option>
-      </nz-select>
-      <nz-pagination [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalElements"
-                [nzShowSizeChanger]="false" (nzPageIndexChange)="onPageChange($event)">
-            </nz-pagination>
+      <nz-input-group
+        class="search-input"
+        [nzPrefix]="prefixIconSearch"
+        nzSearch
+      >
+        <input
+          nz-input
+          type="text"
+          placeholder="Search books, ISBN, names..."
+          [(ngModel)]="tableInput.searchValue"
+          (ngModelChange)="onSearchChange()"
+        />
+      </nz-input-group>
     </div>
+
+    <button
+      nz-button
+      nzType="primary"
+      nzSize="large"
+      (click)="navigateToCreate()"
+    >
+      <nz-icon nzType="plus"></nz-icon>
+      Upload New Book
+    </button>
   </div>
 </div>
+
+<!-- prefix icon template -->
+<ng-template #prefixIconSearch>
+  <nz-icon nzType="search"></nz-icon>
+</ng-template>
+
+
+<nz-table [nzData]="data" [nzLoading]="loading" [nzFrontPagination]="false" [nzBordered]="true" nzSize="middle">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th nzColumnKey="title" nzShowSort (nzSortOrderChange)="onSort('title', $event)">Title</th>
+      <th nzColumnKey="isbn" nzShowSort (nzSortOrderChange)="onSort('isbn', $event)">ISBN</th>
+      <th nzColumnKey="price" nzShowSort (nzSortOrderChange)="onSort('price', $event)">Price</th>
+      <th nzColumnKey="stock" nzShowSort (nzSortOrderChange)="onSort('stock', $event)">Stock</th>
+      <th nzColumnKey="author" nzShowSort (nzSortOrderChange)="onSort('author', $event)">Author</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let book of data">
+      <td>{{ book.id }}</td>
+      <td>{{ book.title }}</td>
+      <td>{{ book.isbn }}</td>
+      <td>{{ book.price | currency }}</td>
+      <td>{{ book.stock }}</td>
+      <td>{{ book.authorName }}</td>
+      <td>
+        <button nz-button nzType="link" (click)="navigateToUpdate(book.id)" aria-label="Edit">
+          <i nz-icon nzType="edit"></i>
+        </button>
+        <a (click)="deleteBook(book.id)" nzDanger style="cursor:pointer">
+          <i nz-icon nzType="delete" nzTheme="outline"></i>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<div class="center-container-grid mt-3">
+  <div class="content-to-center">
+    <nz-pagination [nzPageIndex]="tableInput.pageIndex" [nzPageSize]="tableInput.pageSize" [nzTotal]="total"
+      [nzShowSizeChanger]="true" [nzPageSizeOptions]="[5,10,20,50]" [nzShowTotal]="totalTpl"
+      (nzPageIndexChange)="onPageChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+    </nz-pagination>
+  </div>
+</div>
+
+<ng-template #totalTpl let-total let-range="range">
+  Showing {{ range[0] }}–{{ range[1] }} of {{ total }} items · Page {{ tableInput.pageIndex }} of {{ getTotalPages() }}
+</ng-template>

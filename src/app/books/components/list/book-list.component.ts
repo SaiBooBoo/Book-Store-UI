@@ -5,7 +5,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { ChangeDetectorRef } from "@angular/core";
 
@@ -13,67 +13,110 @@ import { Book } from "../../model/book.model";
 import { NzIconDirective } from "ng-zorro-antd/icon";
 import { BookService } from "../../service/book.service";
 import { NzSelectModule } from "ng-zorro-antd/select";
+import { BookQueryCriteria, DataTableInput, DataTableOutput } from "../../../shared/models/datatable";
+import { Subscription } from "rxjs";
+import { NzMessageService } from "ng-zorro-antd/message";
+import { NzModalModule, NzModalService } from "ng-zorro-antd/modal";
+import { NzInputModule } from "ng-zorro-antd/input";
+
 
 
 
 @Component({
     selector: 'app-book-list',
     standalone: true,
-    imports: [CommonModule, NzTableModule, NzButtonModule, NzPaginationModule,
-        NzIconDirective, NzIconModule, NzDividerModule, NzSelectModule, FormsModule],
+    imports: [CommonModule,
+        NzTableModule,
+        NzButtonModule,
+        NzPaginationModule,
+        NzIconDirective,
+        NzIconModule,
+        NzDividerModule,
+        NzSelectModule,
+        FormsModule,
+        NzInputModule,
+        NzModalModule],
     templateUrl: './book-list.component.html',
-    styleUrl: 'book.list.component.css'
+    styleUrls: ['./book.list.component.css']
 })
 export class BookListComponent implements OnInit {
 
-    books: Book[] = [];
+    data: Book[] = [];
+    total = 0;
+    loading = false;
 
-    totalElements = 0;
-    pageSize = 10;
-    pageIndex = 1;
+    tableInput: DataTableInput<BookQueryCriteria> = {
+        pageIndex: 1,
+        pageSize: 10,
+        sortField: 'id',
+        sortOrder: 'ascend',
+        queryCriteria: {},
+        searchValue: '',
+        draw: 1
+    };
 
-    isLoading = false;
-
-    readonly pageSizeOptions = [5, 10, 20, 50];
+    private subscriptions = new Subscription();
 
     constructor(
         private bookService: BookService,
-        private router : Router,
-        private cdr: ChangeDetectorRef
-    ) {}
+        private modal: NzModalService,
+        private message: NzMessageService,
+        private router: Router,
+        private cdr: ChangeDetectorRef,
+        private route: ActivatedRoute
+    ) { }
 
     ngOnInit(): void {
         this.loadBooks();
     }
 
-    loadBooks(): void {
-        this.isLoading = true;
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
 
-        const backendPage = this.pageIndex - 1;
-        this.bookService.getBooks(backendPage).subscribe({
-            next: (data) => {
-                this.books = data.content;
-                this.totalElements = data.page.totalElements;
-                this.pageSize = data.page.size;
-                this.isLoading = false;
+    loadBooks(resetDraw = false): void {
+        this.loading = true;
+         this.tableInput.draw = resetDraw ? 1 : (this.tableInput.draw ?? 0) + 1;
+
+        const request: DataTableInput<BookQueryCriteria> = {
+            ...this.tableInput,
+            queryCriteria: {
+                ...this.tableInput.queryCriteria,
+                blurry: this.tableInput.searchValue?.trim() || undefined
+            }
+        };
+
+        const sub = this.bookService.datatableBook(request).subscribe({
+            next: (res: DataTableOutput<Book>) => {
+                this.data = res?.data || [];
+                this.total = Number(res?.recordsFiltered ?? res?.recordsTotal ?? 0);
+                this.loading = false;
                 this.cdr.detectChanges();
             },
-            error: () => {
-                this.isLoading = false;   
+            error: (err) => {
+                console.error('Failed to load books', err);
+                this.loading = false;
                 this.cdr.detectChanges();
             }
         });
+
+        this.subscriptions.add(sub);
     }
 
     onPageChange(pageIndex: number): void {
-        this.pageIndex = pageIndex;
+        this.tableInput.pageIndex = pageIndex;
         this.loadBooks();
     }
 
-    onPageSizeChange(size : number):void {
-        this.pageSize = size;
-        this.pageIndex =  1;
+    onPageSizeChange(size: number): void {
+        this.tableInput.pageSize = size;
+        this.tableInput.pageIndex = 1;
         this.loadBooks();
+    }
+
+   onSearchChange(): void {
+        this.tableInput.pageIndex = 1;
+        this.loadBooks(true);
     }
 
     navigateToCreate(): void {
@@ -101,4 +144,14 @@ export class BookListComponent implements OnInit {
         })
     }
 
+    onSort(field: string, order: string | null): void {
+        this.tableInput.sortField = field;
+        this.tableInput.sortOrder = (order as 'ascend' | 'descend') ?? undefined;
+        this.tableInput.pageIndex = 1;
+        this.loadBooks(true);
+    }
+
+    getTotalPages(): number {
+        return Math.max(1, Math.ceil(this.total / this.tableInput.pageSize));
+    }
 }

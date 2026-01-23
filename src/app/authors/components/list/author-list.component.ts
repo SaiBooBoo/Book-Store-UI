@@ -96,7 +96,6 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     (click)="editAuthor(author.id)"
     aria-label="Edit author">
     <mat-icon nz-icon nzType="edit"></mat-icon>
-    Update
   </button>
 
           <nz-divider nzType="vertical"></nz-divider>
@@ -144,13 +143,13 @@ export class AuthorListComponent implements OnInit, OnDestroy {
   loading = false;
 
   tableInput: DataTableInput<AuthorQueryCriteria> = {
-    pageIndex: 1,  // 1-based page index
+    pageIndex: 1,  
     pageSize: 10,
     sortField: 'id',
     sortOrder: 'ascend',
     queryCriteria: {},
     searchValue: '',
-    draw: 1        // start draw at 1
+    draw: 1     
   };
 
   criteria: AuthorQueryCriteria = {};
@@ -178,7 +177,7 @@ export class AuthorListComponent implements OnInit, OnDestroy {
     if (this.tableInput.searchValue?.trim()) {
       criteria.blurry = this.tableInput.searchValue.trim();
     } else {
-      delete (criteria as any).blurry; //??
+      delete (criteria as any).blurry; // check the filter for the backend -> empty, missing, null
     }
     return criteria;
   }

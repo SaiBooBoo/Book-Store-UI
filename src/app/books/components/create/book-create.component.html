@@ -9,13 +9,13 @@
     <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="authorId">Author</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Author is required">
-            <nz-select id="authorId" [nzLoading]="authorLoading" formControlName="authorId" placeholder="Select an author">
+            <nz-select id="authorId" [nzLoading]="authorLoading" formControlName="authorId" nzPlaceHolder="Select an author">
 
                 <nz-option
                     *ngFor="let author of authors"
                     [nzValue]="author.id"
                     [nzLabel]="author.firstName + ' ' + author.lastName"
-                     placeHolder="Select an Author">
+                    >
                 </nz-option>
             </nz-select>
         </nz-form-control>
@@ -34,9 +34,7 @@
                 <div nz-form-explain *ngIf="validateForm.get('price')?.errors?.['required']" class="error-text">
                     <span>Price is required</span>
                 </div>
-                @if (validateForm.get('price')?.errors?.['min']) {
-                    <span class="error-text">Nothing is free of charge my friend</span>
-                }
+               @if (validateForm.get('price')?.errors?.['min']) { <span class="error-text">Price must be at least 1</span> }
 
             </ng-container>
         </nz-form-control>
@@ -81,6 +79,6 @@
 <style>
   .error-text {
     color: #ff4d4f;
-    font-size: 12px;
+    font-size: 14px;
   }
 </style>

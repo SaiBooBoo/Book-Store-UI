@@ -71,8 +71,8 @@ export class BookCreateComponent {
         title: this.fb.control('', [Validators.required]),
         authorId: this.fb.control<number | null>(null, Validators.required),
         isbn: this.fb.control('', [Validators.required]),
-        price: this.fb.control(0, [ Validators.min(0)]),
-        stock: this.fb.control(0, [ Validators.min(0)]),
+        price: this.fb.control(0, [Validators.required, Validators.min(1)]),
+        stock: this.fb.control(0, [Validators.required, Validators.min(0)]),
         description: this.fb.control(''),
     })
 

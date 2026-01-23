@@ -28,7 +28,7 @@ import { Author } from "../../../authors/models/author.model";
     ]
 })
 export class BookUpdateComponent implements OnInit {
-    
+
     public GET_ALL_AUTHORS_URL = "http://localhost:8080/api/admin/authors/all";
     
     private fb = inject(FormBuilder);
@@ -38,78 +38,93 @@ export class BookUpdateComponent implements OnInit {
     private message = inject(NzMessageService)
     private bookService = inject(BookService);
 
-    authors : Author[] = [];
+    authors: Author[] = [];
     authorLoading = false;
-    bookForm!: FormGroup;
-    submitting  = false;
+    submitting = false;
+    loadingBook = false;
     bookId!: number;
+    bookForm!: FormGroup;
+
 
     ngOnInit(): void {
         this.bookId = Number(this.route.snapshot.paramMap.get('id'));
-       this.initForm();
+        this.initForm();
         this.loadAuthors();
         this.loadBook();
     }
 
-    private loadAuthors(): void {
-        this.http.get<Author[]>(this.GET_ALL_AUTHORS_URL)
-        .subscribe({
-            next: data => {
-                this.authors = data,
-                this.authorLoading = false;
-            },
-            error: err => {
-                this.authorLoading = false;
-            }
-        });
-    }
-
     private initForm(): void {
         this.bookForm = this.fb.group({
-        title: ['', [Validators.required]],
-        author: ['', [Validators.required]],
-        isbn: ['', [Validators.required]],
-        price: [0, [Validators.required]],
-        stock: [0, [Validators.required]],
-        description: ['']
-    })
+            title: ['', [Validators.required]],
+            authorId: ['', [Validators.required]],
+            isbn: ['', [Validators.required]],
+            price: [0, [Validators.required, Validators.min(1)]],
+            stock: [0, [Validators.required, Validators.min(0)]],
+            description: ['', [Validators.maxLength(1000)]]
+        })
+    }
+
+    private loadAuthors(): void {
+        this.http.get<Author[]>(this.GET_ALL_AUTHORS_URL)
+            .subscribe({
+                next: data => {
+                    this.authors = data,
+                        this.authorLoading = false;
+                },
+                error: err => {
+                    this.authorLoading = false;
+                    this.message.error('Failed to load authors');
+                }
+            });
     }
 
     private loadBook(): void {
+        this.loadingBook = true;
         this.bookService.getBookById(this.bookId).subscribe({
             next: (book) => {
                 this.bookForm.patchValue({
                     title: book.title,
-                    author: book.author?.id,
+                    authorId: book.authorId,
                     isbn: book.isbn,
                     price: book.price,
                     stock: book.stock,
                     description: book.description
                 });
-                this.message.success("Book updated successfully");
+                this.loadingBook = false;
             },
             error: err => {
+                this.loadingBook = false;
                 this.message.error('Failed to load book');
-                this.submitting = false;
             }
         })
     }
 
-    
+
     submitForm(): void {
-        if(this.bookForm.invalid){
-            this.bookForm.markAllAsTouched();
+        if (this.bookForm.invalid) {
+            Object.values(this.bookForm.controls).forEach(control => {
+                if(control.invalid){
+                    control.markAsDirty();
+                    control.updateValueAndValidity({ onlySelf: true});
+                }
+            });
             return;
         }
-       
+
         this.submitting = true;
 
-        this.bookService.updateBook(this.bookId, this.bookForm.value).subscribe({
+        const updateData = {
+            ...this.bookForm.value,
+            id: this.bookId
+        };
+
+        this.bookService.updateBook(this.bookId, updateData).subscribe({
             next: () => {
                 this.message.success('Book updated successfully')
                 this.router.navigate(['/admin/books']);
             },
-            error: () => {
+            error: (err) => {
+                console.error(err);
                 this.submitting = false;
                 this.message.error('Failed to update book');
             }
@@ -126,9 +141,6 @@ export class BookUpdateComponent implements OnInit {
     cancel(): void {
         this.router.navigate(['admin/books'])
     }
-
-   
-  
 }
 
 

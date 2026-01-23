@@ -1,86 +1,84 @@
 <h2>Update Book Form</h2>
+
 <form nz-form nzLayout="horizontal" [formGroup]="bookForm" (ngSubmit)="submitForm()">
-    <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="title">Title</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Title is required">
-            <input nz-input formControlName="title" id="title" placeHolder="Enter the title"/>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="authorId">Author</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Author is required">
-            <nz-select id="authorId" [nzLoading]="authorLoading" formControlName="authorId" placeholder="Select an author">
+  
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="title">Title</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Title is required">
+      <input nz-input formControlName="title" id="title" placeholder="Enter the title" />
+    </nz-form-control>
+  </nz-form-item>
 
-                <nz-option
-                    *ngFor="let author of authors"
-                    [nzValue]="author.id"
-                    [nzLabel]="author.firstName + ' ' + author.lastName"
-                     placeHolder="Select an Author">
-                </nz-option>
-            </nz-select>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="isbn">ISBN</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Isbn is required">
-            <input nz-input formControlName="isbn" id="isbn" placeholder="Enter the ISBN of the book"/>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="price">Price</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="bookForm.get('price')!">
-            <input type="number" nz-input formControlName="price" id="price" placeholder="Enter the price of the book" >
-            <ng-container *ngIf="bookForm.get('price')?.touched || bookForm.get('price')?.dirty">
-                <div nz-form-explain *ngIf="bookForm.get('price')?.errors?.['required']" class="error-text">
-                    <span>Price is required</span>
-                </div>
-                @if (bookForm.get('price')?.errors?.['min']) {
-                    <span class="error-text">Nothing is free of charge my friend</span>
-                }
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="authorId">Author</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Author is required">
+      <nz-select id="authorId" formControlName="authorId" [nzLoading]="authorLoading" nzPlaceHolder="Select an Author">
+        <nz-option 
+          *ngFor="let author of authors" 
+          [nzValue]="author.id" 
+          [nzLabel]="author.firstName + ' ' + author.lastName">
+        </nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
 
-            </ng-container>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="stock">Stock</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="bookForm.get('stock')!">
-            <input type="number" nz-input formControlName="stock" id="stock" placeholder="Enter amount of books you have in storage">
-            <ng-container *ngIf="bookForm.get('stock')?.touched || bookForm.get('stock')?.dirty">
-                <div nz-form-explain *ngIf="bookForm.get('stock')?.errors?.['required']" class="error-text">
-                    Stock is required
-                </div>
-                <div nz-form-explain *ngIf="bookForm.get('stock')?.errors?.['min']" class="error-text">
-                    Stock must be 0 or greater
-                </div>
-            </ng-container>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired  nzFor="description">Description</nz-form-label>
-        <nz-form-control >
-            <nz-textarea-count  [nzMaxCharacterCount]="1000">
-                  <textarea nz-input formControlName="description" rows="3" id="description" placeholder="Book Description"></textarea>
-            </nz-textarea-count>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-control [nzOffset]="6" [nzSpan]="14">
-            <button nz-button nzType="primary" (click)="submitForm()" [disabled]="submitting || bookForm.pending">
-            {{ submitting ? 'Updating...' : 'Update' }}
-        </button>
-            <button nz-button nzType="default" style="margin-left: 8px" type="button" (click)="resetform()">
-                Reset
-            </button>
-            <button nz-button nzType="default" style="margin-left: 8px" type="button" (click)="cancel()">
-                Cancel
-            </button>
-        </nz-form-control>
-    </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="isbn">ISBN</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="ISBN is required">
+      <input nz-input formControlName="isbn" id="isbn" placeholder="Enter ISBN" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="price">Price</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input type="number" nz-input formControlName="price" id="price" />
+      @if (bookForm.get('price')?.dirty && bookForm.get('price')?.errors) {
+        <div class="error-text">
+          @if (bookForm.get('price')?.errors?.['required']) { <span>Price is required</span> }
+          @if (bookForm.get('price')?.errors?.['min']) { <span>Price must be at least 1</span> }
+        </div>
+      }
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="stock">Stock</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input type="number" nz-input formControlName="stock" id="stock" />
+      @if (bookForm.get('stock')?.dirty && bookForm.get('stock')?.errors) {
+        <div class="error-text">
+          @if (bookForm.get('stock')?.errors?.['required']) { <span>Stock is required</span> }
+          @if (bookForm.get('stock')?.errors?.['min']) { <span>Stock cannot be negative</span> }
+        </div>
+      }
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <textarea nz-input formControlName="description" rows="3" id="description" placeholder="Book Description"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control [nzOffset]="6" [nzSpan]="14">
+      <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">
+        Update
+      </button>
+      <button nz-button nzType="default" style="margin-left: 8px" type="button" (click)="resetform()">
+        Reset
+      </button>
+      <button nz-button nzType="default" style="margin-left: 8px" type="button" (click)="cancel()">
+        Cancel
+      </button>
+    </nz-form-control>
+  </nz-form-item>
 </form>
-
 <style>
-  .error-text {
-    color: #ff4d4f;
-    font-size: 12px;
-  }
+    .error-text{
+        color: #ff4d4f;
+        font-size: 14px;
+    }
 </style>
