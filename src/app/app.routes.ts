@@ -1,11 +1,7 @@
-import { RouterModule, Routes } from '@angular/router';
-import { BookListComponent } from './books/components/list/book-list.component';
-import { AuthorListComponent } from './authors/components/list/author-list.component';
-import { AuthorCreateComponent } from './authors/components/create/author-create.component';
-import { BookCreateComponent } from './books/components/create/book-create.component';
-import { AuthGuard } from './core/guards/auth.guard';
+
+import { Routes } from '@angular/router';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { NgModule } from '@angular/core';
+
 
 export const routes: Routes = [
 
@@ -32,7 +28,13 @@ export const routes: Routes = [
                     import('./authors/authors.routes')
                         .then(m => m.AUTHOR_ROUTES)
             },
-        ]}
+        ]},
+        {
+                path: 'auth',
+                loadChildren: () =>
+                    import('./core/services/auth.routes')
+                        .then(m => m.AUTH_ROUTES )
+            }
 ];
 
 

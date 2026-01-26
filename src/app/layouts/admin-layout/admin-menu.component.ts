@@ -29,7 +29,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 
       <nz-tab
         nzTitle="Create Book"
-        nzLink="/admin/books/new">
+        nzLink="/a">
       </nz-tab>
 
       <nz-tab

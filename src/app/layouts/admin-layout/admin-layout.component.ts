@@ -5,6 +5,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzButtonComponent, NzButtonModule } from "ng-zorro-antd/button";
 
 @Component({
     standalone: true,
@@ -12,14 +13,15 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
     templateUrl: './admin-layout.component.html',
     styleUrls: ['./admin-layout.component.css'],
     imports: [
-        NzPageHeaderModule,
-        NzTabsModule,
-        RouterModule,
-        RouterOutlet,
-        NzIconModule,
-        NzMenuModule,
-        NzLayoutModule
-    ]
+    NzPageHeaderModule,
+    NzTabsModule,
+    RouterModule,
+    RouterOutlet,
+    NzIconModule,
+    NzMenuModule,
+    NzLayoutModule,
+    NzButtonModule
+]
 })
 export class AdminLayoutComponent {
     collapsed = false;
