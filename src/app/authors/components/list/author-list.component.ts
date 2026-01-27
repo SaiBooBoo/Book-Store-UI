@@ -21,6 +21,7 @@ import { Author } from '../../models/author.model';
 import { AuthorQueryCriteria, DataTableInput, DataTableOutput } from '../../../shared/models/datatable';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-author-list',
@@ -209,8 +210,9 @@ export class AuthorListComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to load authors', err);
+        
         this.loading = false;
         this.cdr.detectChanges();
       }

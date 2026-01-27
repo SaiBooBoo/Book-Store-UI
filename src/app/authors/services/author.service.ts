@@ -27,8 +27,9 @@ export class AuthorService {
         return this.http.delete<void>(environment.apiBaseUrl + "/admin/author/delete/" + authorId);
     }
 
+    private baseUrl = 'http://localhost:8080/api/admin/authors';
     datatable (input: DataTableInput<AuthorQueryCriteria>): Observable<DataTableOutput<Author>> {
-        return this.http.post<DataTableOutput<Author>>(this.API_URL + '/datatable', input);
+        return this.http.post<DataTableOutput<Author>>(`${this.baseUrl}/datatable`, input);
     }
 
     

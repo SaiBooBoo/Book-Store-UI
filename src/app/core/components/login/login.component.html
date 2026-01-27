@@ -2,29 +2,46 @@
   <nz-row justify="center" align="middle" class="login-row">
     <nz-col [nzXs]="22" [nzSm]="16" [nzMd]="10" [nzLg]="8">
       <nz-card nzTitle="Log in">
-
         <form nz-form [formGroup]="loginForm" (ngSubmit)="submit()">
 
+          <!-- Username -->
           <nz-form-item>
             <nz-form-label nzRequired>Username</nz-form-label>
-            <nz-form-control nzErrorTip="Valid username required">
+            <nz-form-control [nzValidateStatus]="loginForm.get('username')!" nzHasFeedback>
               <input nz-input formControlName="username" />
+              <ng-container *ngIf="loginForm.get('username')?.touched || loginForm.get('username')?.dirty">
+                <div nz-form-explain *ngIf="loginForm.get('username')?.errors?.['required']">
+                  Username is required
+                </div>
+                <div nz-form-explain *ngIf="loginForm.get('username')?.errors?.['serverError']">
+                  {{ loginForm.get('username')?.errors?.['serverError'] }}
+                </div>
+              </ng-container>
             </nz-form-control>
           </nz-form-item>
+
 
           <nz-form-item>
             <nz-form-label nzRequired>Password</nz-form-label>
-            <nz-form-control nzErrorTip="Password required">
+            <nz-form-control [nzValidateStatus]="loginForm.get('password')!" nzHasFeedback>
               <input nz-input type="password" formControlName="password" />
+              <ng-container *ngIf="loginForm.get('password')?.touched || loginForm.get('password')?.dirty">
+                <div nz-form-explain *ngIf="loginForm.get('password')?.errors?.['required']">
+                  Password is required
+                </div>
+                <div nz-form-explain *ngIf="loginForm.get('password')?.errors?.['serverError']">
+                  {{ loginForm.get('password')?.errors?.['serverError'] }}
+                </div>
+              </ng-container>
             </nz-form-control>
           </nz-form-item>
 
-          <button nz-button nzType="primary" nzBlock htmlType="submit">
-            Log in
+          <button nz-button nzType="primary" nzBlock [disabled]="submitting || loginForm.invalid" htmlType="submit">
+            <span *ngIf="!submitting">Log in</span>
+            <span *ngIf="submitting">Signing in…</span>
           </button>
 
         </form>
-
       </nz-card>
     </nz-col>
   </nz-row>
