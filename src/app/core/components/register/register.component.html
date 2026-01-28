@@ -5,12 +5,11 @@
         <nz-form-control [nzErrorTip]="registerForm.get('username')?.errors?.['backend']">
             <input nz-input formControlName="username" />
         </nz-form-control>
-        <div *ngIf="registerForm.get('username')?.errors?.['server']"
-     class="error">
-  {{ registerForm.get('username')?.errors?.['server'] }}
-</div>
     </nz-form-item>
-    
+    <div *ngIf="registerForm.get('username')?.errors?.['backend']">
+        {{ registerForm.get('username')?.errors?.['backend'] }}
+    </div>
+
     <nz-form-item>
         <nz-form-label nzRequired>Password</nz-form-label>
         <nz-form-control [nzErrorTip]="registerForm.get('password')?.errors?.['backend']">
@@ -20,7 +19,8 @@
 
     <nz-form-item>
         <nz-form-label nzRequired>Confirm Password</nz-form-label>s
-        <nz-form-control [nzErrorTip]="passwordErrorTpl" [nzErrorTip]="registerForm.get('confirmPassword')?.errors?.['backend']">
+        <nz-form-control [nzErrorTip]="passwordErrorTpl"
+            [nzErrorTip]="registerForm.get('confirmPassword')?.errors?.['backend']">
             <input nz-input type="password" formControlName="confirmPassword" />
         </nz-form-control>
     </nz-form-item>

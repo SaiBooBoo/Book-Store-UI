@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
     FormBuilder,
@@ -35,6 +35,7 @@ export class RegisterComponent {
         private authService: AuthService,
         private router: Router,
         private message: NzMessageService,
+        private cdr: ChangeDetectorRef
     ) {
         this.registerForm = this.fb.group({
             username: ['', [Validators.required, Validators.minLength(4)]],
@@ -46,30 +47,36 @@ export class RegisterComponent {
     }
 
     error: any = {};
-    
+
     submit(): void {
         if (this.registerForm.invalid) {
             this.registerForm.markAllAsTouched();
             return;
         }
-        setTimeout(() => {
-            this.loading = true;
-        });
 
-        const { confirmPassword, ...payload } = this.registerForm.value;
+        this.loading = true;
+
+        const payload = {
+            username: this.registerForm.value.username,
+            password: this.registerForm.value.password
+        };
 
         this.authService.register(payload).subscribe({
             next: () => {
                 this.message.success('Registration successful. Please log in.');
+                this.loading = false;
+                
+                this.cdr.detectChanges();
                 this.router.navigate(['/login']);
             },
-            error: (err) => {
+            error: err => {
                 if (err.status === 400 && err.error) {
                     this.mapBackendErrors(err.error);
                 } else {
                     this.message.error('Registration failed');
                 }
                 this.loading = false;
+                 this.cdr.detectChanges();
             }
         });
     }
@@ -83,10 +90,9 @@ export class RegisterComponent {
 
     private mapBackendErrors(errors: any): void {
         Object.keys(errors).forEach(field => {
-            const control = this.registerForm.get(field);
-            if (control) {
-                control.setErrors({ backend: errors[field] });
-            }
-        })
+            this.registerForm.get(field)?.setErrors({
+                backend: errors[field]
+            });
+        });
     }
 }
