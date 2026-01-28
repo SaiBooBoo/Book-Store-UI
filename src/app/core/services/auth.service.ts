@@ -1,85 +1,62 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable, signal } from "@angular/core";
-import { Router } from "@angular/router";
-import { BehaviorSubject, Observable } from "rxjs";
-import { JwtResponse, LoginRequest } from "../components/models/auth.model";
-import { tap } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable ,tap} from "rxjs";
+import { AuthResponse, LoginRequest, RegisterRequest } from "../components/models/auth.model";
 
-
-const TOKEN_KEY = 'auth_token';
-
-@Injectable({ providedIn: 'root'})
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
 
-    private baseUrl  = 'http://localhost:8080/api/auth';
-    private authState  = new BehaviorSubject<boolean>(this.hasValidToken());
+  private readonly API_URL = 'http://localhost:8080/api/auth';
+  private readonly TOKEN_KEY = 'auth_token';
 
-   authState$: Observable<boolean> = this.authState.asObservable();
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(
+    this.hasToken()
+  );
 
-   constructor(private http: HttpClient, private router: Router) {}
+   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-   login(username: string, password: string): Observable<JwtResponse> {
-    const body: LoginRequest = { username, password };
-    return this.http.post<JwtResponse>(`${this.baseUrl}/login`, body).pipe(
-      tap(res => {
-        if (res?.token) {
-          this.storeToken(res.token);
-          this.authState.next(true);
-        }
+  constructor(private http: HttpClient) {}
+
+ login(request: LoginRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      `${this.API_URL}/login`,
+      request
+    ).pipe(
+      tap(response => {
+        this.storeToken(response.token);
+        this.isAuthenticatedSubject.next(true);
       })
-    )
-   }
-
-   logout(redirectToLogin = true) {
-    this.removeToken();
-    this.authState.next(false);
-    if (redirectToLogin) {
-      this.router.navigate(['/login']);
-    }
+    );
   }
 
-  storeToken(token: string) {
-    localStorage.setItem(TOKEN_KEY, token);
+ register(request: RegisterRequest): Observable<void> {
+    return this.http.post<void>(
+      `${this.API_URL}/register`,
+      request
+    );
   }
+
+  logout(): void {
+    this.clearToken();
+    this.isAuthenticatedSubject.next(false);
+  }
+
 
   getToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  removeToken() {
-    localStorage.removeItem(TOKEN_KEY);
+  private storeToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
   }
 
-  private decodePayload(token: string) {
-    try {
-      const payload = token.split('.')[1];
-      return JSON.parse(atob(payload));
-    } catch {
-      return null;
-    }
+  private clearToken(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
   }
 
-   getTokenExpirationDate(token?: string): Date | null {
-    const t = token ?? this.getToken();
-    if (!t) return null;
-    const payload = this.decodePayload(t);
-    if (!payload || !payload.exp) return null;
-    // exp is usually in seconds
-    const date = new Date(0);
-    date.setUTCSeconds(payload.exp);
-    return date;
+  private hasToken(): boolean {
+    return !!this.getToken();
   }
-
-  isTokenExpired(token?: string): boolean {
-    const exp = this.getTokenExpirationDate(token);
-    if (!exp) return true;
-    return exp.getTime() < Date.now();
-  }
-
-  hasValidToken(): boolean {
-    const t = this.getToken();
-    return !!t && !this.isTokenExpired(t);
-  }
-
-
 }

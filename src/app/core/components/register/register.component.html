@@ -1,0 +1,33 @@
+<form nz-form [formGroup]="registerForm" (ngSubmit)="submit()">
+
+    <nz-form-item>
+        <nz-form-label nzRequired>Username</nz-form-label>
+        <nz-form-control nzErrorTip="Username is required (min 4 characters)">
+            <input nz-input formControlName="username" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzRequired>Password</nz-form-label>
+        <nz-form-control nzErrorTip="Password must be at least 6 characters">
+            <input nz-input type="password" formControlName="password" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzRequired>Confirm Password</nz-form-label>
+        <nz-form-control [nzErrorTip]="passwordErrorTpl">
+            <input nz-input type="password" formControlName="confirmPassword" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <ng-template #passwordErrorTpl>
+        <ng-container *ngIf="registerForm.errors?.['passwordMismatch']">
+            Passwords do not match
+        </ng-container>
+    </ng-template>
+
+    <button nz-button nzType="primary" nzBlock [nzLoading]="loading">
+        Register
+    </button>
+</form>

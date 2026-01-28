@@ -1,11 +1,14 @@
 
-export interface JwtResponse {
-    token: string;
-    tokenType?: 'Bearer' | string;
-    expiresIn?: number;
+export interface LoginRequest {
+  username: string;
+  password: string;
 }
 
-export interface LoginRequest {
-    username: string;
-    password: string;
+export interface RegisterRequest {
+  username: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  token: string;
 }
