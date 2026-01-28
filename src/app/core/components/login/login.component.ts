@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -17,8 +17,9 @@ import { AuthService } from '../../services/auth.service';
     ReactiveFormsModule,
     NzFormModule,
     NzInputModule,
-    NzButtonModule
-  ],
+    NzButtonModule,
+    RouterLink
+],
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
@@ -65,5 +66,9 @@ export class LoginComponent {
         this.loading = false;
       }
     });
+  }
+
+  toRegister() : void {
+    this.router.navigateByUrl('http://localhost:4200/auth/register');
   }
 }

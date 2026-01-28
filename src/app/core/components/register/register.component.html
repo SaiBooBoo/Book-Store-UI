@@ -2,21 +2,25 @@
 
     <nz-form-item>
         <nz-form-label nzRequired>Username</nz-form-label>
-        <nz-form-control nzErrorTip="Username is required (min 4 characters)">
+        <nz-form-control [nzErrorTip]="registerForm.get('username')?.errors?.['backend']">
             <input nz-input formControlName="username" />
         </nz-form-control>
+        <div *ngIf="registerForm.get('username')?.errors?.['server']"
+     class="error">
+  {{ registerForm.get('username')?.errors?.['server'] }}
+</div>
     </nz-form-item>
-
+    
     <nz-form-item>
         <nz-form-label nzRequired>Password</nz-form-label>
-        <nz-form-control nzErrorTip="Password must be at least 6 characters">
+        <nz-form-control [nzErrorTip]="registerForm.get('password')?.errors?.['backend']">
             <input nz-input type="password" formControlName="password" />
         </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-        <nz-form-label nzRequired>Confirm Password</nz-form-label>
-        <nz-form-control [nzErrorTip]="passwordErrorTpl">
+        <nz-form-label nzRequired>Confirm Password</nz-form-label>s
+        <nz-form-control [nzErrorTip]="passwordErrorTpl" [nzErrorTip]="registerForm.get('confirmPassword')?.errors?.['backend']">
             <input nz-input type="password" formControlName="confirmPassword" />
         </nz-form-control>
     </nz-form-item>
@@ -30,4 +34,7 @@
     <button nz-button nzType="primary" nzBlock [nzLoading]="loading">
         Register
     </button>
+    <div style="margin-top: 1rem; text-align: center;">
+        <span>Already a member? <a routerLink="/auth/login">Sign in here</a></span>
+    </div>
 </form>

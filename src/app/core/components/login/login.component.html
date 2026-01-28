@@ -2,26 +2,22 @@
 
   <nz-form-item>
     <nz-form-label nzRequired>Username</nz-form-label>
-    <nz-form-control
-      nzErrorTip="Username is required">
+    <nz-form-control nzErrorTip="Username is required">
       <input nz-input formControlName="username" />
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
     <nz-form-label nzRequired>Password</nz-form-label>
-    <nz-form-control
-      nzErrorTip="Password is required">
+    <nz-form-control nzErrorTip="Password is required">
       <input nz-input type="password" formControlName="password" />
     </nz-form-control>
   </nz-form-item>
 
-   <button
-    nz-button
-    nzType="primary"
-    nzBlock
-    [nzLoading]="loading">
+  <button nz-button nzType="primary" nzBlock [nzLoading]="loading">
     Log in
   </button>
-
+   <div style="margin-top: 1rem; text-align: center;">
+    <span>Not a member yet? <a routerLink="/auth/register">Register here</a></span>
+  </div>
 </form>

@@ -1,58 +1,48 @@
 <nz-layout class="admin-layout">
   <!-- Header -->
- <nz-header class="admin-header">
-  <div class="header-left">
-    <nz-icon nzType="book" class="logo-icon" />
-    <span class="title">Slim Shady Bookstore</span>
-  </div>
+  <nz-header class="admin-header">
+    <div class="header-left">
+      <nz-icon nzType="book" class="logo-icon" />
+      <span class="title">Slim Shady Bookstore</span>
+    </div>
 
-  <div class="header-right">
-    <a routerLink="/auth/login" routerLinkActive="app-login" nzGhost class="logout-button">
-  Logout
-    </a>
-  </div>
-</nz-header>
+    <div class="header-right">
+      <ng-container *ngIf="isAuthenticated$ | async; else guestLinks">
+        <a routerLink="/auth/login" routerLinkActive="app-login" nzGhost class="logout-button">
+          Logout
+        </a>
+      </ng-container>
 
-  <nz-layout>
-    <!-- Sider -->
-    <nz-sider
-      nzTheme="dark"
-      nzWidth="220"
-      nzCollapsible
-      [(nzCollapsed)]="collapsed">
+      <ng-template #guestLinks>
+        <a routerLink="/login" nz-button nzType="primary">Login</a>
+      <a routerLink="/register" nz-button nzType="default">Register</a>
+      </ng-template>
+    </div>
+  </nz-header>
+
+  <nz-layout>>
+    <nz-sider nzTheme="dark" nzWidth="220" nzCollapsible [(nzCollapsed)]="collapsed">
 
       <ul nz-menu nzMode="inline" nzTheme="dark">
-        <li
-          nz-menu-item
-          routerLink="/admin/books"
-          routerLinkActive="ant-menu-item-selected"
+        <li nz-menu-item routerLink="/admin/books" routerLinkActive="ant-menu-item-selected"
           [routerLinkActiveOptions]="{ exact: true }">
           <nz-icon nzType="book" />
           <span>Books</span>
         </li>
 
-        <li
-          nz-menu-item
-          routerLink="/admin/authors"
-          routerLinkActive="ant-menu-item-selected"
+        <li nz-menu-item routerLink="/admin/authors" routerLinkActive="ant-menu-item-selected"
           [routerLinkActiveOptions]="{ exact: true }">
           <nz-icon nzType="user" />
           <span>Authors</span>
         </li>
 
-        <li
-          nz-menu-item
-          routerLink="/admin/authors/new"
-          routerLinkActive="ant-menu-item-selected"
+        <li nz-menu-item routerLink="/admin/authors/new" routerLinkActive="ant-menu-item-selected"
           [routerLinkActiveOptions]="{ exact: true }">
           <nz-icon nzType="tags" />
           <span>Create Author</span>
         </li>
 
-        <li
-          nz-menu-item
-          routerLink="/admin/books/new"
-          routerLinkActive="ant-menu-item-selected"
+        <li nz-menu-item routerLink="/admin/books/new" routerLinkActive="ant-menu-item-selected"
           [routerLinkActiveOptions]="{ exact: true}">
           <nz-icon nzType="file-add" nzTheme="outline" />
           <span>Create Book</span>

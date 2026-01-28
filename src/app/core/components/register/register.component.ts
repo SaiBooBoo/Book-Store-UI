@@ -6,7 +6,7 @@ import {
     Validators,
     ReactiveFormsModule
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -21,7 +21,8 @@ import { AuthService } from '../../services/auth.service';
         ReactiveFormsModule,
         NzFormModule,
         NzInputModule,
-        NzButtonModule
+        NzButtonModule,
+        RouterLink
     ],
     templateUrl: './register.component.html'
 })
@@ -33,7 +34,7 @@ export class RegisterComponent {
         private fb: FormBuilder,
         private authService: AuthService,
         private router: Router,
-        private message: NzMessageService
+        private message: NzMessageService,
     ) {
         this.registerForm = this.fb.group({
             username: ['', [Validators.required, Validators.minLength(4)]],
@@ -44,13 +45,16 @@ export class RegisterComponent {
         });
     }
 
+    error: any = {};
+    
     submit(): void {
         if (this.registerForm.invalid) {
             this.registerForm.markAllAsTouched();
             return;
         }
-
-        this.loading = true;
+        setTimeout(() => {
+            this.loading = true;
+        });
 
         const { confirmPassword, ...payload } = this.registerForm.value;
 
@@ -74,17 +78,15 @@ export class RegisterComponent {
         const password = form.get('password')?.value;
         const confirm = form.get('confirmPassword')?.value;
 
-        return password === confirm ? null : { passwordMatchValidator: true};
+        return password === confirm ? null : { passwordMatchValidator: true };
     }
 
     private mapBackendErrors(errors: any): void {
         Object.keys(errors).forEach(field => {
             const control = this.registerForm.get(field);
             if (control) {
-                control.setErrors({ backend: errors[field]});
+                control.setErrors({ backend: errors[field] });
             }
         })
     }
-
-
 }
