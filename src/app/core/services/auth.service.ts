@@ -43,7 +43,6 @@ export class AuthService {
     this.isAuthenticatedSubject.next(false);
   }
 
-
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
@@ -59,4 +58,5 @@ export class AuthService {
   private hasToken(): boolean {
     return !!this.getToken();
   }
+
 }

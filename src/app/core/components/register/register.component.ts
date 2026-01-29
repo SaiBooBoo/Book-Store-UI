@@ -4,7 +4,11 @@ import {
     FormBuilder,
     FormGroup,
     Validators,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
+    ValidatorFn,
+    AbstractControl,
+    ValidationErrors
 } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -18,6 +22,7 @@ import { AuthService } from '../../services/auth.service';
     standalone: true,
     imports: [
         CommonModule,
+        FormsModule,
         ReactiveFormsModule,
         NzFormModule,
         NzInputModule,
@@ -49,6 +54,8 @@ export class RegisterComponent {
     error: any = {};
 
     submit(): void {
+        this.trimFormValues();
+
         if (this.registerForm.invalid) {
             this.registerForm.markAllAsTouched();
             return;
@@ -65,9 +72,12 @@ export class RegisterComponent {
             next: () => {
                 this.message.success('Registration successful. Please log in.');
                 this.loading = false;
-                
+
                 this.cdr.detectChanges();
-                this.router.navigate(['/login']);
+                setTimeout(() => {
+                    this.router.navigate(['/auth/login']);
+                }, 1000)
+
             },
             error: err => {
                 if (err.status === 400 && err.error) {
@@ -76,16 +86,28 @@ export class RegisterComponent {
                     this.message.error('Registration failed');
                 }
                 this.loading = false;
-                 this.cdr.detectChanges();
+                this.cdr.detectChanges();
+
             }
         });
     }
 
-    private passwordMatchValidator(form: FormGroup) {
-        const password = form.get('password')?.value;
-        const confirm = form.get('confirmPassword')?.value;
+    private passwordMatchValidator: ValidatorFn = (form: AbstractControl): ValidationErrors | null => { // what does this line trying to suggest
 
-        return password === confirm ? null : { passwordMatchValidator: true };
+        const password = form.get('password');
+        const confirm = form.get('confirmPassword');
+
+        if (!password || !confirm) return null;
+
+        if (password.value !== confirm.value) {
+            confirm.setErrors({ passwordMismatch: true });
+            return null;
+        }
+
+        if (confirm.hasError('passwordMismatch')) {
+            confirm.setErrors(null);
+        }
+        return null;
     }
 
     private mapBackendErrors(errors: any): void {
@@ -94,5 +116,14 @@ export class RegisterComponent {
                 backend: errors[field]
             });
         });
+    }
+
+    private trimFormValues(): void {
+        Object.keys(this.registerForm.controls).forEach(key => {
+            const control = this.registerForm.get(key);
+            if (control && typeof control.value === 'string') {
+                control.setValue(control.value.trim(), { emitEvent: false });
+            }
+        })
     }
 }

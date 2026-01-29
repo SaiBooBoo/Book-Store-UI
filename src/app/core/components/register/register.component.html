@@ -2,34 +2,43 @@
 
     <nz-form-item>
         <nz-form-label nzRequired>Username</nz-form-label>
-        <nz-form-control [nzErrorTip]="registerForm.get('username')?.errors?.['backend']">
-            <input nz-input formControlName="username" />
+        <nz-form-control [nzValidateStatus]="registerForm.get('username')!" nzHasFeedBack>
+            <input nz-input formControlName="username" placeholder="Enter the Username" />
+            <ng-container *ngIf="registerForm.get('username')?.touched || registerForm.get('username')?.dirty">
+                <div nz-form-explain *ngIf="registerForm.get('username')?.errors?.['required']" class="error-text">
+                    Username must not be empty!
+                </div>
+            </ng-container>
         </nz-form-control>
     </nz-form-item>
-    <div *ngIf="registerForm.get('username')?.errors?.['backend']">
-        {{ registerForm.get('username')?.errors?.['backend'] }}
-    </div>
 
     <nz-form-item>
         <nz-form-label nzRequired>Password</nz-form-label>
-        <nz-form-control [nzErrorTip]="registerForm.get('password')?.errors?.['backend']">
-            <input nz-input type="password" formControlName="password" />
+        <nz-form-control [nzValidateStatus]="registerForm.get('password')!" nzHasFeedBack>
+            <input nz-input type="password" formControlName="password" placeholder="Enter the password" />
+            <ng-container *ngIf="registerForm.get('password')?.touched || registerForm.get('password')?.dirty">
+                <div nz-form-explain *ngIf="registerForm.get('password')?.errors?.['required']" class="error-text">
+                    Password must not be empty!
+                </div>
+            </ng-container>
         </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-        <nz-form-label nzRequired>Confirm Password</nz-form-label>s
-        <nz-form-control [nzErrorTip]="passwordErrorTpl"
-            [nzErrorTip]="registerForm.get('confirmPassword')?.errors?.['backend']">
-            <input nz-input type="password" formControlName="confirmPassword" />
+        <nz-form-label nzRequired>Confirm Password</nz-form-label>
+        <nz-form-control [nzValidateStatus]="registerForm.get('confirmPassword')!" nzHasFeedBack>
+            <input nz-input type="password" formControlName="confirmPassword"
+                placeholder="Please repeat the password" />
+            <ng-container
+                *ngIf="registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty 
+                && registerForm.get('confirmPassword')?.invalid">
+                <div nz-form-explain *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']"
+                    class="error-text">
+                    Passwords do not match
+                </div>
+            </ng-container>
         </nz-form-control>
     </nz-form-item>
-
-    <ng-template #passwordErrorTpl>
-        <ng-container *ngIf="registerForm.errors?.['passwordMismatch']">
-            Passwords do not match
-        </ng-container>
-    </ng-template>
 
     <button nz-button nzType="primary" nzBlock [nzLoading]="loading">
         Register
@@ -38,3 +47,10 @@
         <span>Already a member? <a routerLink="/auth/login">Sign in here</a></span>
     </div>
 </form>
+
+<style>
+    .error-text {
+        color: #ff4d4f;
+        font-size: 14px;
+    }
+</style>

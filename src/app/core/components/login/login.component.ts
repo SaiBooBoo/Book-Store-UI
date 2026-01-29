@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth.service';;
 
 
 @Component({
@@ -14,6 +14,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     NzFormModule,
     NzInputModule,
@@ -33,7 +34,8 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private cdr: ChangeDetectorRef
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -50,12 +52,17 @@ export class LoginComponent {
       return;
     }
 
+    this.cdr.detectChanges();
     this.loading = true;
 
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
         this.message.success('Login successful');
-        this.router.navigateByUrl(this.returnUrl);
+
+    
+          this.router.navigateByUrl(this.returnUrl);
+        
+        
       },
       error: (err) => {
         if (err.status === 401) {
@@ -64,6 +71,7 @@ export class LoginComponent {
           this.message.error('Login failed');
         }
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }

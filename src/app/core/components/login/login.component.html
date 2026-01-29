@@ -2,15 +2,25 @@
 
   <nz-form-item>
     <nz-form-label nzRequired>Username</nz-form-label>
-    <nz-form-control nzErrorTip="Username is required">
-      <input nz-input formControlName="username" />
+    <nz-form-control [nzValidateStatus]="loginForm.get('username')!" nzHasFeedback>
+      <input nz-input formControlName="username" placeholder="Enter the username" />
+      <ng-container *ngIf="loginForm.get('username')?.touched || loginForm.get('username')?.dirty">
+        <div nz-form-explain *ngIf="loginForm.get('username')?.errors?.['required']" class="error-text">
+                    Username must not be empty!
+        </div>
+      </ng-container>
     </nz-form-control>
   </nz-form-item>
 
-  <nz-form-item>
+ <nz-form-item>
     <nz-form-label nzRequired>Password</nz-form-label>
-    <nz-form-control nzErrorTip="Password is required">
-      <input nz-input type="password" formControlName="password" />
+    <nz-form-control [nzValidateStatus]="loginForm.get('password')!" nzHasFeedback>
+      <input nz-input formControlName="password" placeholder="Enter the username" />
+      <ng-container *ngIf="loginForm.get('password')?.touched || loginForm.get('password')?.dirty">
+        <div nz-form-explain *ngIf="loginForm.get('username')?.errors?.['required']" class="error-text">
+                    Password must not be empty!
+        </div>
+      </ng-container>
     </nz-form-control>
   </nz-form-item>
 
@@ -21,3 +31,10 @@
     <span>Not a member yet? <a routerLink="/auth/register">Register here</a></span>
   </div>
 </form>
+
+<style>
+  .error-text{
+    color: #ff4d4f;
+    font-size: 14px;
+  }
+</style>
