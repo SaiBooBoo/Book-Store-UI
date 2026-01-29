@@ -39,12 +39,15 @@ export class AuthInterceptor implements HttpInterceptor {
          if (error.status === 401) {
           // Token invalid / expired
           this.authService.logout();
-          this.router.navigate(['/login']);
+          // this.router.navigate(['/login']);
+         
+           this.router.navigateByUrl('/auth/login', { replaceUrl: true });
         }
 
         if (error.status === 403) {
           // Authenticated but forbidden
-          this.router.navigate(['/forbidden']);
+          // this.router.navigate(['/forbidden']);
+          console.warn("Access denied");
         }
 
         return throwError(() => error);

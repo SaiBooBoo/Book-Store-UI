@@ -53,6 +53,8 @@ export class AuthService {
 
   private clearToken(): void {
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem('item');
+    sessionStorage.clear();
   }
 
   private hasToken(): boolean {

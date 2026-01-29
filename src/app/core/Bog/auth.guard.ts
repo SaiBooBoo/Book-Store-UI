@@ -3,7 +3,8 @@ import {
   CanActivate,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
-  Router
+  Router,
+  UrlTree
 } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
@@ -12,25 +13,29 @@ import { AuthService } from '../services/auth.service';
 })
 export class AuthGuard implements CanActivate {
 
-     constructor(
+  constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
-   canActivate(
+
+  canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot // ?
-  ): boolean {
+    state: RouterStateSnapshot 
+  ): boolean | UrlTree {
 
-     if (this.authService.getToken()) {
+    const token = this.authService.getToken();
+
+    if (token) {
       return true;
     }
 
-    this.router.navigate(['/login'], {
-      queryParams: { returnUrl: state.url }
-    });
-
-    return false;
+    return this.router.createUrlTree(
+    ['/auth/login'],
+    {
+       queryParams: { returnUrl: state.url }
+    }
+    );
   }
 
 }

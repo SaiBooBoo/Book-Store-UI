@@ -43,7 +43,7 @@ export class AdminLayoutComponent implements OnInit  {
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']);
+     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 
 }
