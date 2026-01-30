@@ -92,6 +92,7 @@ export class BookCreateComponent {
             next: () => {
                 this.message.success('Book created successfully', {nzDuration: 4000})
                 this.validateForm.reset({price: 0, stock: 0});
+                this.router.navigate(['/admin/books']);
             },
             error: () => {
                this.message.error('Failed to create book');

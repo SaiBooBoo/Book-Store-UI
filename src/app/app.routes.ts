@@ -1,14 +1,16 @@
 
 import { Routes } from '@angular/router';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { AuthGuard } from './core/Bog/auth.guard';
 
 export const routes: Routes = [
 
-   {path: '', redirectTo: 'admin', pathMatch: 'full'},
+   {path: '', redirectTo: 'auth/login', pathMatch: 'full'},
     {
         path: 'admin', 
         component: AdminLayoutComponent,
-        // x
+        canLoad: [AuthGuard],
+        canActivateChild: [AuthGuard],
         children: [
             {
                 path: '',

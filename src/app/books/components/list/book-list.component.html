@@ -18,7 +18,7 @@
       </nz-input-group>
     </div>
 
-    <button
+    <button *ngIf="(role$ | async) === 'ROLE_ADMIN'"
       nz-button
       nzType="primary"
       nzSize="large"
@@ -40,10 +40,10 @@
   <thead>
     <tr>
       <th>ID</th>
-      <th nzColumnKey="title" nzShowSort (nzSortOrderChange)="onSort('title', $event)">Title</th>
+      <th nzColumnKey="title" nzShowSort (nzSortOrderChange)="onSort('title', $event)" nzDefaultSortOrder="descend">Title</th>
       <th nzColumnKey="isbn" nzShowSort (nzSortOrderChange)="onSort('isbn', $event)">ISBN</th>
-      <th nzColumnKey="price" nzShowSort (nzSortOrderChange)="onSort('price', $event)">Price</th>
-      <th nzColumnKey="stock" nzShowSort (nzSortOrderChange)="onSort('stock', $event)">Stock</th>
+      <th nzColumnKey="price" nzShowSort (nzSortOrderChange)="onSort('price', $event)" >Price</th>
+      <th nzColumnKey="stock" nzShowSort (nzSortOrderChange)="onSort('stock', $event)" >Stock</th>
       <th nzColumnKey="author" nzShowSort (nzSortOrderChange)="onSort('author', $event)">Author</th>
       <th>Action</th>
     </tr>
@@ -58,12 +58,12 @@
       <td>{{ book.stock }}</td>
       <td>{{ book.authorName }}</td>
       <td>
-        <button nz-button nzType="link" (click)="navigateToUpdate(book.id)" aria-label="Edit">
-          <i nz-icon nzType="edit"></i>
+        <button [disabled]="!(isAdmin$ | async)" nz-button nzType="link" (click)="navigateToUpdate(book.id)" aria-label="Edit">
+          <i nz-icon nzType="edit" nzTheme="outline"></i>
         </button>
-        <a (click)="deleteBook(book.id)" nzDanger style="cursor:pointer">
+        <button (click)="deleteBook(book.id)" nz-button [disabled]="!(isAdmin$ | async)" nzDanger style="cursor:pointer">
           <i nz-icon nzType="delete" nzTheme="outline"></i>
-        </a>
+        </button>
       </td>
     </tr>
   </tbody>

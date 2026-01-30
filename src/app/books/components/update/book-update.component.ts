@@ -70,6 +70,10 @@ export class BookUpdateComponent implements OnInit {
                 next: data => {
                     this.authors = data,
                         this.authorLoading = false;
+
+                this.bookForm.patchValue({
+                    authorId: this.bookId
+                })
                 },
                 error: err => {
                     this.authorLoading = false;
@@ -132,9 +136,18 @@ export class BookUpdateComponent implements OnInit {
     }
 
     resetform(): void {
-        this.bookForm.reset({
-            price: 0,
-            stock: 0
+        Object.keys(this.bookForm.controls).forEach(key => {
+
+            const control = this.bookForm.get(key);
+            
+            if (control?.dirty) {
+
+                control.reset();
+
+                if (key === 'price' || key === 'stock') {
+                    control.reset(0);
+                }
+            }
         })
     }
 

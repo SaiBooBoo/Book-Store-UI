@@ -20,7 +20,7 @@ export class BookService {
         page: number = 0,
         size: number = 5,
         sortBy: string = 'id',
-        direction: string = 'asc'
+        direction: string = 'desc'
     ): Observable<PageResponse<Book>> {
 
         const params = new HttpParams()

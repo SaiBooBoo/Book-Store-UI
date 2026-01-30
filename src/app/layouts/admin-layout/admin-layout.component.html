@@ -8,14 +8,18 @@
 
     <div class="header-right">
       <ng-container *ngIf="isAuthenticated$ | async; else guestLinks">
-        <a routerLink="/auth/login" routerLinkActive="app-login" nzGhost class="logout-button">
+        <!-- <a routerLink="/auth/login" routerLinkActive="app-login" nzGhost class="logout-button">
           Logout
-        </a>
+        </a> -->
+        <button nz-button (click)="logout()" nzType="primary" 
+    nzDanger >
+          Logout
+        </button>
       </ng-container>
 
       <ng-template #guestLinks>
         <a routerLink="/auth/login" nz-button nzType="primary">Login</a>
-      <a routerLink="/auth/register" nz-button nzType="default">Register</a>
+        <a routerLink="/auth/register" nz-button nzType="default">Register</a>
       </ng-template>
     </div>
   </nz-header>
@@ -30,33 +34,31 @@
           <span>Books</span>
         </li>
 
-        <li nz-menu-item routerLink="/admin/authors" routerLinkActive="ant-menu-item-selected"
+        <li *ngIf="(role$ | async) === 'ROLE_ADMIN'" nz-menu-item routerLink="/admin/authors" routerLinkActive="ant-menu-item-selected"
           [routerLinkActiveOptions]="{ exact: true }">
           <nz-icon nzType="user" />
           <span>Authors</span>
         </li>
 
-        <li nz-menu-item routerLink="/admin/authors/new" routerLinkActive="ant-menu-item-selected"
+        <li *ngIf="(role$ | async) === 'ROLE_ADMIN'" nz-menu-item routerLink="/admin/authors/new" routerLinkActive="ant-menu-item-selected"
           [routerLinkActiveOptions]="{ exact: true }">
           <nz-icon nzType="tags" />
           <span>Create Author</span>
         </li>
 
-        <li nz-menu-item routerLink="/admin/books/new" routerLinkActive="ant-menu-item-selected"
-          [routerLinkActiveOptions]="{ exact: true}">
+        <li *ngIf="(role$ | async) === 'ROLE_ADMIN'" nz-menu-item routerLink="/admin/books/new"
+          routerLinkActive="ant-menu-item-selected" [routerLinkActiveOptions]="{ exact: true}">
           <nz-icon nzType="file-add" nzTheme="outline" />
           <span>Create Book</span>
         </li>
       </ul>
     </nz-sider>
 
-    <!-- Content -->
     <nz-layout class="content-layout">
       <nz-content class="admin-content">
         <router-outlet></router-outlet>
       </nz-content>
 
-      <!-- Footer -->
       <nz-footer class="admin-footer">
         Slim Shady Bookstore © 2026
       </nz-footer>

@@ -1,11 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { NzPageHeaderModule } from "ng-zorro-antd/page-header";
 import { NzTabsModule } from 'ng-zorro-antd/tabs'; 
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { NzButtonComponent, NzButtonModule } from "ng-zorro-antd/button";
+import { NzButtonModule } from "ng-zorro-antd/button";
 import { Observable } from "rxjs";
 import { AuthService } from "../../core/services/auth.service";
 import { CommonModule } from "@angular/common";
@@ -32,18 +32,22 @@ export class AdminLayoutComponent implements OnInit  {
 
     isAuthenticated$!: Observable<boolean>;
 
+    private authService = inject(AuthService);
+
     constructor(
-    private authService: AuthService,
     private router: Router
   ) {}
 
+  role$ = this.authService.role$;
   ngOnInit(): void {
     this.isAuthenticated$ = this.authService.isAuthenticated$;
   }
 
   logout(): void {
+    console.log("logout in admin");
+    
     this.authService.logout();
-     this.router.navigateByUrl('/login', { replaceUrl: true });
+     this.router.navigateByUrl('/auth/login', { replaceUrl: true });
   }
 
 }

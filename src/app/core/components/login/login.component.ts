@@ -60,7 +60,7 @@ export class LoginComponent {
         this.message.success('Login successful');
 
     
-          this.router.navigateByUrl(this.returnUrl);
+          this.router.navigateByUrl('/admin/books');
         
         
       },

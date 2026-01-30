@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -14,10 +14,11 @@ import { NzIconDirective } from "ng-zorro-antd/icon";
 import { BookService } from "../../service/book.service";
 import { NzSelectModule } from "ng-zorro-antd/select";
 import { BookQueryCriteria, DataTableInput, DataTableOutput } from "../../../shared/models/datatable";
-import { Subscription } from "rxjs";
+import { map, Observable, Subscription } from "rxjs";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzModalModule, NzModalService } from "ng-zorro-antd/modal";
 import { NzInputModule } from "ng-zorro-antd/input";
+import { AuthService } from "../../../core/services/auth.service";
 
 
 
@@ -55,6 +56,7 @@ export class BookListComponent implements OnInit {
         draw: 1
     };
 
+   
     private subscriptions = new Subscription();
 
     constructor(
@@ -66,9 +68,16 @@ export class BookListComponent implements OnInit {
         private route: ActivatedRoute
     ) { }
 
+     private authService = inject(AuthService);
+     isAuthenticated$!: Observable<boolean>;
+
     ngOnInit(): void {
         this.loadBooks();
+        this.isAuthenticated$ = this.authService.isAuthenticated$;
     }
+     role$ = this.authService.role$;
+     isAdmin$ = this.role$.pipe(map(role => role === 'ROLE_ADMIN'));
+
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();

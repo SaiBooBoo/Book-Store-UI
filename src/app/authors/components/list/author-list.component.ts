@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Inject, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -22,6 +22,7 @@ import { AuthorQueryCriteria, DataTableInput, DataTableOutput } from '../../../s
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-author-list',
@@ -164,6 +165,8 @@ export class AuthorListComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute
   ) { }
+
+  private authService = inject(AuthService);
 
   ngOnInit(): void {
     this.loadData();

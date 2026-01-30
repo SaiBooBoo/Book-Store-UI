@@ -1,41 +1,61 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   CanActivate,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
   Router,
-  UrlTree
+  UrlTree,
+  CanActivateChild
 } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanActivateChild{
 
   constructor(
-    private authService: AuthService,
     private router: Router
   ) { }
+  private authService = inject(AuthService);
+
+  
+
+  canActivate(): boolean | UrlTree {
+    return this.checkAuth();
+  }
 
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot 
-  ): boolean | UrlTree {
+  canActivateChild(): boolean | UrlTree {
+    return this.checkAuth();
+  }
+
+   private checkAuth(): boolean | UrlTree {
 
     const token = this.authService.getToken();
 
-    if (token) {
-      return true;
+    if (!token || this.isTokenExpired(token)) {
+
+      // this.authService.logout();
+
+      return this.router.createUrlTree(['/auth/login']);
     }
 
-    return this.router.createUrlTree(
-    ['/auth/login'],
-    {
-       queryParams: { returnUrl: state.url }
-    }
-    );
+    return true;
   }
 
+  private isTokenExpired(token: string): boolean {
+
+    try {
+      const decoded: any = jwtDecode(token);
+
+      return decoded.exp * 1000 < Date.now();
+
+    } catch {
+      return true; // invalid token = treat as expired
+    }
+  }
 }
+
+
