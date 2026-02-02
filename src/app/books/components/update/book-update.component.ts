@@ -11,7 +11,7 @@ import { NzSelectModule } from "ng-zorro-antd/select";
 import { NzCheckboxModule } from "ng-zorro-antd/checkbox";
 import { HttpClient } from "@angular/common/http";
 import { Author } from "../../../authors/models/author.model";
-
+import { ChangeDetectorRef } from "@angular/core";
 
 @Component({
     selector: 'app-book-update',
@@ -37,6 +37,7 @@ export class BookUpdateComponent implements OnInit {
     private router = inject(Router);
     private message = inject(NzMessageService)
     private bookService = inject(BookService);
+    private cdr = inject(ChangeDetectorRef);
 
     authors: Author[] = [];
     authorLoading = false;
@@ -70,10 +71,7 @@ export class BookUpdateComponent implements OnInit {
                 next: data => {
                     this.authors = data,
                         this.authorLoading = false;
-
-                this.bookForm.patchValue({
-                    authorId: this.bookId
-                })
+                        this.cdr.detectChanges();
                 },
                 error: err => {
                     this.authorLoading = false;
@@ -88,7 +86,7 @@ export class BookUpdateComponent implements OnInit {
             next: (book) => {
                 this.bookForm.patchValue({
                     title: book.title,
-                    authorId: book.authorId,
+                    authorId: Number(book.authorId),
                     isbn: book.isbn,
                     price: book.price,
                     stock: book.stock,
